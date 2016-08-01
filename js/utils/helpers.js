@@ -140,18 +140,28 @@ function getCubeMap(i) {
 /*
  * 
  
-                var ambientLight = new THREE.AmbientLight(0x999999);
-                scene.add(ambientLight);
+ var ambientLight = new THREE.AmbientLight(0x999999);
+ scene.add(ambientLight);
  
  *  
  */
 
 /*
  * 
-var texture = new THREE.TextureLoader().load("textures/image2.jpg");
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(1, 1);
-        
+ var texture = new THREE.TextureLoader().load("textures/image2.jpg");
+ texture.wrapS = THREE.RepeatWrapping;
+ texture.wrapT = THREE.RepeatWrapping;
+ texture.repeat.set(1, 1);
+ 
+ *  
+ */
+
+/*
+ * 
+ 
+ hero.material.metalnessMap.magFilter = THREE.NearestFilter;
+ hero.material.metalnessMap.wrapT = THREE.RepeatWrapping;
+ hero.material.color.setHSL( time / 10, 0.5, 0.5 );
+ hero.material.metalnessMap.offset.x = time;
  *  
  */
