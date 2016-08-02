@@ -1,4 +1,4 @@
-# [Immersive Three.js Workshop]
+# Immersive Three.js Workshop
 
 [![alt text](http://immersive.marpi.pl/assets/image.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
 
