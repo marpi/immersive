@@ -81,7 +81,7 @@
             function setup() {
                 var cubeMap = getCubeMap(9)
 
-                var cubeShader = THREE.ShaderLib['cube'];
+                /*var cubeShader = THREE.ShaderLib['cube'];
                 cubeShader.uniforms['tCube'].value = cubeMap;
 
                 var skyBoxMaterial = new THREE.ShaderMaterial({
@@ -94,9 +94,11 @@
 
                 var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
 
-                scene.add(skyBox);
+                scene.add(skyBox);*/
+        
+        
 
-                var texture = new THREE.TextureLoader().load("assets/textures/world.jpg");
+                var texture = new THREE.TextureLoader().load("assets/textures/immersive.jpg");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);
@@ -112,13 +114,13 @@
                     v.z *= .1 + .5 * random;
                 }
 
-                material = new THREE.MeshPhongMaterial({/*map: texture,*/ envMap: cubeMap, shading: THREE.FlatShading});//map:texture,
+                material = new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide});//map:texture,
 
                 // central object
 
-                //var geometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
-                //var object = new THREE.Mesh(geometry, material);
-                //scene.add(object);
+                var geometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                var object = new THREE.Mesh(geometry, material);
+                scene.add(object);
 
                 // cubes
 
@@ -211,7 +213,7 @@
 
                 if (mobile) {
                     camera.position.set(0, 0, 0)
-                    camera.translateZ(5);
+                    camera.translateZ(0);
                 }
                 renderer.render(scene, camera);
                 //}
