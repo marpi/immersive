@@ -31,7 +31,7 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer;
+            var camera, scene, renderer, material;
             var mobile = false;
 
             init();
@@ -79,8 +79,8 @@
             }
 
             function setup() {
-                var cubeMap=getCubeMap(9)
-                
+                var cubeMap = getCubeMap(9)
+
                 var cubeShader = THREE.ShaderLib['cube'];
                 cubeShader.uniforms['tCube'].value = cubeMap;
 
@@ -101,41 +101,41 @@
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);
 
-                var material = new THREE.MeshPhongMaterial({/*map: texture,*/ envMap:cubeMap,shading: THREE.FlatShading});//map:texture,
+                material = new THREE.MeshPhongMaterial({/*map: texture,*/ envMap: cubeMap, shading: THREE.FlatShading});//map:texture,
 
                 // central object
 
                 var geometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
-                var object = new THREE.Mesh(geometry, material);
-                scene.add(object);
+                //var object = new THREE.Mesh(geometry, material);
+                //scene.add(object);
 
                 // cubes
 
-                var group = new THREE.Object3D();
-                for (var _x = -3; _x <= 3; _x++) {
-                    for (var _y = -13; _y <= 13; _y++) {
-                        for (var _z = -13; _z <= 13; _z++) {
-                            var geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
-                            var mesh = new THREE.Mesh(geo, material)
-
-                            mesh.position.set(_x, _y, _z)
-                            mesh.rotation.set(Math.random(), Math.random(), Math.random())
-                            mesh.scale.set(Math.random() * 5, Math.random() * 5, Math.random() * 5)
-
-                            group.add(mesh);
-                        }
-                    }
-                }
-
-                // merge
-
-                var geom = new THREE.Geometry()
-                for (var i = 0; i < group.children.length; i++) {
-                    group.children[i].updateMatrix();
-                    geom.merge(group.children[i].geometry, group.children[i].matrix);
-                }
-                group = new THREE.Mesh(geom, material);
-                scene.add(group)
+                /*var group = new THREE.Object3D();
+                 for (var _x = -3; _x <= 3; _x++) {
+                 for (var _y = -13; _y <= 13; _y++) {
+                 for (var _z = -13; _z <= 13; _z++) {
+                 var geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
+                 var mesh = new THREE.Mesh(geo, material)
+                 
+                 mesh.position.set(_x, _y, _z)
+                 mesh.rotation.set(Math.random(), Math.random(), Math.random())
+                 mesh.scale.set(Math.random() * 5, Math.random() * 5, Math.random() * 5)
+                 
+                 group.add(mesh);
+                 }
+                 }
+                 }
+                 
+                 // merge
+                 
+                 var geom = new THREE.Geometry()
+                 for (var i = 0; i < group.children.length; i++) {
+                 group.children[i].updateMatrix();
+                 geom.merge(group.children[i].geometry, group.children[i].matrix);
+                 }
+                 group = new THREE.Mesh(geom, material);
+                 scene.add(group)*/
 
                 // light
 
@@ -145,11 +145,20 @@
                 //var pointlight = new THREE.PointLight(0xFFffff, 1, 10)
                 //pointlight.position.x = 10
                 //camera.add(pointlight)
-                
+
             }
             var num = 0
             function render() {
                 requestAnimationFrame(render);
+
+                for (var i = 0; i < 1; i++) {
+                    var geometry = new THREE.SphereGeometry(.5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                    var object = new THREE.Mesh(geometry, material);
+                    object.position.set((Math.random() - .5) * 100, (Math.random() - .5) * 100, (Math.random() - .5) * 100)
+                    TweenMax.to(object.position, 1, {x: 0, y: 0, z: 0})
+                    scene.add(object);
+                }
+
 
                 //num++
                 //if(num==2){
