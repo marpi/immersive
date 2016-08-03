@@ -91,7 +91,7 @@
 
                 var group = new THREE.Object3D();
                 for (var _x = -3; _x <= 3; _x++) {
-                    for (var _y = -3; _y <= 3; _y++) {
+                    for (var _y = -13; _y <= 13; _y++) {
                         for (var _z = -13; _z <= 13; _z++) {
                             var geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
                             var mesh = new THREE.Mesh(geo, material)
@@ -117,9 +117,13 @@
 
                 // light
 
-                var light = new THREE.DirectionalLight(0xffffff);
+                var light = new THREE.DirectionalLight(0x222222);
                 light.position.set(-1, 1.5, 0.5);
                 scene.add(light);
+                
+                var pointlight = new THREE.PointLight(0xFFffff,10,10)
+                //pointlight.position.x=10
+                camera.add(pointlight)
             }
 
             function render() {
