@@ -79,9 +79,9 @@
             }
 
             function setup() {
-                var cubeMap = getCubeMap(9)
+                var cubeMap = getCubeMap(10)
 
-                /*var cubeShader = THREE.ShaderLib['cube'];
+                var cubeShader = THREE.ShaderLib['cube'];
                 cubeShader.uniforms['tCube'].value = cubeMap;
 
                 var skyBoxMaterial = new THREE.ShaderMaterial({
@@ -94,7 +94,7 @@
 
                 var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
 
-                scene.add(skyBox);*/
+                scene.add(skyBox);
         
         
 
@@ -103,7 +103,7 @@
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);
 
-                geometry = new THREE.SphereGeometry(.05, 20, 20)
+                geometry = new THREE.SphereGeometry(.5, 20, 20)
 
                 for (var i = 0; i < geometry.vertices.length; i++) {
                     var v = geometry.vertices[i]
@@ -122,7 +122,7 @@
 
                 var sgeometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
                 var object = new THREE.Mesh(sgeometry, smaterial);
-                scene.add(object);
+                //scene.add(object);
 
                 // cubes
 
@@ -172,7 +172,7 @@
             function render() {
                 requestAnimationFrame(render);
 
-                /*num++
+                num++
                 if (num == 3) {
                     num = 0
                     for (var i = 0; i < 1; i++) {
@@ -205,7 +205,7 @@
 
                         scene.add(object);
                     }
-                }*/
+                }
 
                 //num++
                 //if(num==2){
