@@ -79,11 +79,16 @@
             }
 
             function setup() {
+                var texture = new THREE.TextureLoader().load("assets/textures/world.jpg");
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(1, 1);
+                
+                var material = new THREE.MeshPhongMaterial({map:texture,shading: THREE.SmoothShading});//map:texture,
 
                 // central object
 
-                var geometry = new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
-                var material = new THREE.MeshPhongMaterial({shading: THREE.FlatShading, color: 0xFFCC00});
+                var geometry = new THREE.SphereGeometry(5,20,20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
                 var object = new THREE.Mesh(geometry, material);
                 scene.add(object);
 
@@ -117,18 +122,20 @@
 
                 // light
 
-                var light = new THREE.DirectionalLight(0x222222);
-                light.position.set(-1, 1.5, 0.5);
+                var light = new THREE.AmbientLight(0x999999);
                 scene.add(light);
-                
-                var pointlight = new THREE.PointLight(0xFFffff,10,10)
-                //pointlight.position.x=10
+
+                var pointlight = new THREE.PointLight(0xFFffff, 1, 10)
+                //pointlight.position.x = 10
                 camera.add(pointlight)
             }
-
+            var num=0
             function render() {
                 requestAnimationFrame(render);
-
+                
+                //num++
+                //if(num==2){
+                //    num=0
                 controls.update();
 
                 if (mobile) {
@@ -136,6 +143,7 @@
                     camera.translateZ(5);
                 }
                 renderer.render(scene, camera);
+                //}
 
             }
 
