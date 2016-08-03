@@ -113,13 +113,15 @@
                     v.y *= .1 + .5 * random;
                     v.z *= .1 + .5 * random;
                 }
+                
+                material = new THREE.MeshPhongMaterial({envMap:cubeMap,shading:THREE.FlatShading});
 
-                material = new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide});//map:texture,
+                var smaterial = new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide});//map:texture,
 
                 // central object
 
-                var geometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
-                var object = new THREE.Mesh(geometry, material);
+                var sgeometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                var object = new THREE.Mesh(sgeometry, smaterial);
                 scene.add(object);
 
                 // cubes
