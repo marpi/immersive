@@ -79,7 +79,7 @@
             }
 
             function setup() {
-                var cubeMap=getCubeMap(1)
+                var cubeMap=getCubeMap(9)
                 
                 var cubeShader = THREE.ShaderLib['cube'];
                 cubeShader.uniforms['tCube'].value = cubeMap;
@@ -101,7 +101,7 @@
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);
 
-                var material = new THREE.MeshPhongMaterial({map: texture, envMap:cubeMap,shading: THREE.SmoothShading});//map:texture,
+                var material = new THREE.MeshPhongMaterial({/*map: texture,*/ envMap:cubeMap,shading: THREE.FlatShading});//map:texture,
 
                 // central object
 
@@ -111,7 +111,7 @@
 
                 // cubes
 
-                /*var group = new THREE.Object3D();
+                var group = new THREE.Object3D();
                 for (var _x = -3; _x <= 3; _x++) {
                     for (var _y = -13; _y <= 13; _y++) {
                         for (var _z = -13; _z <= 13; _z++) {
@@ -135,7 +135,7 @@
                     geom.merge(group.children[i].geometry, group.children[i].matrix);
                 }
                 group = new THREE.Mesh(geom, material);
-                scene.add(group)*/
+                scene.add(group)
 
                 // light
 
