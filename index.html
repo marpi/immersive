@@ -79,22 +79,39 @@
             }
 
             function setup() {
+                var cubeMap=getCubeMap(1)
+                
+                var cubeShader = THREE.ShaderLib['cube'];
+                cubeShader.uniforms['tCube'].value = cubeMap;
+
+                var skyBoxMaterial = new THREE.ShaderMaterial({
+                    fragmentShader: cubeShader.fragmentShader,
+                    vertexShader: cubeShader.vertexShader,
+                    uniforms: cubeShader.uniforms,
+                    depthWrite: false,
+                    side: THREE.BackSide
+                });
+
+                var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
+
+                scene.add(skyBox);
+
                 var texture = new THREE.TextureLoader().load("assets/textures/world.jpg");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);
-                
-                var material = new THREE.MeshPhongMaterial({map:texture,shading: THREE.SmoothShading});//map:texture,
+
+                var material = new THREE.MeshPhongMaterial({map: texture, envMap:cubeMap,shading: THREE.SmoothShading});//map:texture,
 
                 // central object
 
-                var geometry = new THREE.SphereGeometry(5,20,20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                var geometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
                 var object = new THREE.Mesh(geometry, material);
                 scene.add(object);
 
                 // cubes
 
-                var group = new THREE.Object3D();
+                /*var group = new THREE.Object3D();
                 for (var _x = -3; _x <= 3; _x++) {
                     for (var _y = -13; _y <= 13; _y++) {
                         for (var _z = -13; _z <= 13; _z++) {
@@ -118,21 +135,22 @@
                     geom.merge(group.children[i].geometry, group.children[i].matrix);
                 }
                 group = new THREE.Mesh(geom, material);
-                scene.add(group)
+                scene.add(group)*/
 
                 // light
 
-                var light = new THREE.AmbientLight(0x999999);
+                var light = new THREE.AmbientLight(0xFFFFFF);
                 scene.add(light);
 
-                var pointlight = new THREE.PointLight(0xFFffff, 1, 10)
+                //var pointlight = new THREE.PointLight(0xFFffff, 1, 10)
                 //pointlight.position.x = 10
-                camera.add(pointlight)
+                //camera.add(pointlight)
+                
             }
-            var num=0
+            var num = 0
             function render() {
                 requestAnimationFrame(render);
-                
+
                 //num++
                 //if(num==2){
                 //    num=0
