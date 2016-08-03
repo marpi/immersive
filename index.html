@@ -31,7 +31,7 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer, material;
+            var camera, scene, renderer, material, geometry;
             var mobile = false;
 
             init();
@@ -101,11 +101,21 @@
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);
 
+                geometry = new THREE.SphereGeometry(.5, 20, 20)
+                
+                for(var i=0;i<geometry.vertices.length;i++){
+                    var v=geometry.vertices[i]
+                    var random=Math.random()
+                    v.x*=1+5*random
+                    v.y*=1+5*random
+                    v.z*=1+5*random
+                }
+                
                 material = new THREE.MeshPhongMaterial({/*map: texture,*/ envMap: cubeMap, shading: THREE.FlatShading});//map:texture,
 
                 // central object
 
-                var geometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                //var geometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
                 //var object = new THREE.Mesh(geometry, material);
                 //scene.add(object);
 
@@ -147,15 +157,44 @@
                 //camera.add(pointlight)
 
             }
+
+            function remove(object) {
+                //console.log('remove',object)
+                scene.remove(object)
+            }
+
             var num = 0
             function render() {
                 requestAnimationFrame(render);
 
                 for (var i = 0; i < 1; i++) {
-                    var geometry = new THREE.SphereGeometry(.5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                    //new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
                     var object = new THREE.Mesh(geometry, material);
                     object.position.set((Math.random() - .5) * 100, (Math.random() - .5) * 100, (Math.random() - .5) * 100)
-                    TweenMax.to(object.position, 1, {x: 0, y: 0, z: 0})
+
+                    var ease=Expo.easeOut
+                    
+                    TweenMax.to(object.position, 10,
+                            {
+                                x: 0,
+                                y: 0,
+                                z: 0,
+                                onComplete: remove,
+                                onCompleteParams: [object],
+                                ease:ease
+                            }
+                    )
+                    TweenMax.to(object.rotation, 10,
+                            {
+                                x: Math.random()*Math.PI*10,
+                                y: Math.random()*Math.PI*10,
+                                z: Math.random()*Math.PI*10,
+                                ease:ease
+                            }
+                    )
+
+
+
                     scene.add(object);
                 }
 
