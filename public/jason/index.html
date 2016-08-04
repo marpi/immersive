@@ -31,7 +31,7 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer;
+            var camera, scene, renderer, material, geometry;
             var mobile = false;
             var group;
             init();
@@ -59,11 +59,15 @@
                     controls.standing = false;
                     renderer = new THREE.VREffect(renderer);
                     document.body.appendChild(WEBVR.getButton(renderer));
+
+
                 }
                 // events
                 window.addEventListener('deviceorientation', setOrientationControls, true);
                 window.addEventListener('resize', onWindowResize, false);
             }
+
+
             function setup() {
                 var cubeMap = getCubeMap(6)
                 
@@ -72,9 +76,10 @@
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);               
             
-                var material = new THREE.MeshBasicMaterial({map:texture, side:THREE.BackSide});
-                var object = new THREE.Mesh(geometry, material);
-                material = new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide});//map:texture,
+                var material = new THREE.MeshBasicMaterial({map:texture, side:THREE.DoubleSide});
+
+
+               
                
                 
     
@@ -87,18 +92,19 @@
                
 
                 //cubes
+
                 group = new THREE.Object3D();
                 for (var _x = -4; _x <= 4; _x++) {
                     for (var _y = -4; _y <= 4; _y++) {
                         for (var _z = -4; _z <= 4; _z++) {
-                            var geo = new THREE.CubeGeometry(.1, .1, .1, .1, .1, .1)
-                            var mesh = new THREE.Mesh(geo, material)
+                            var geo = new THREE.CubeGeometry(.1, .1, .1)
+                            var mesh = new THREE.Mesh(geo)
                             mesh.position.set(_x, _y, _z)
                             mesh.rotation.x = _x / 10
                             mesh.rotation.y = 0
                             mesh.rotation.z = _x / 10
                             mesh.scale.x = 1
-                            mesh.scale.y = 4
+                            mesh.scale.y = 1
                             mesh.scale.z = 1
                             group.add(mesh);
                         }
@@ -106,23 +112,21 @@
                 }
 
                 //merge
+
                 var geom = new THREE.Geometry()
                 for (var i = 0; i < group.children.length; i++) {
                     group.children[i].updateMatrix();
                     geom.merge(group.children[i].geometry, group.children[i].matrix);
                 }
-                var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.FlatShading, envMap: texture, wireframe: false});
-                group = new THREE.Mesh(geom, material);
+                var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.FlatShading, wireframe: true});
+                group = new THREE.Mesh(geom);
                 scene.add(group)
 
                 // light
+
                 var light = new THREE.DirectionalLight(0xffffff);
-                light.position.set(2, 2.5, 5);
-                //var light = new THREE.PointLight(0xFFFFFF,1,10)
-                //light.position.x=-1
+                light.position.set(-1, 1.5, 0.5);
                 scene.add(light);
-                //var ambient = new THREE.AmbientLight(0x666666)
-                //scene.add(ambient)
             }
 
             function render() {
