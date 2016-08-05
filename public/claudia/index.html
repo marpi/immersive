@@ -17,10 +17,14 @@
     </head>
     <body>
 
+
+
         <script src="js/third-party/threejs/three.js"></script>
         <script src="js/third-party/threejs/WebVR.js"></script>
         <script src="js/third-party/threejs/effects/VREffect.js"></script>
         <script src="js/third-party/threejs/effects/StereoEffect.js"></script>
+
+        		<script src="js/effects/AsciiEffect.js"></script>
 
         <script src="js/third-party/threejs/controls/VRControls.js"></script>
         <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
@@ -46,6 +50,7 @@
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
+                effect = new THREE.AsciiEffect( renderer );
 
                 // scene
 
@@ -81,7 +86,7 @@
 
                 // central object
 
-                var geometry = new THREE.OctahedronGeometry( 1, 1 );
+                var geometry = new THREE.OctahedronGeometry( .5, 1 );
           			var material = new THREE.MeshNormalMaterial( { color: 0x880088 } );
           			var prism = new THREE.Mesh( geometry, material );
           			scene.add( prism );
