@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Immersive Workshop</title>
+        <meta charset="utf-8">
+        <meta property="og:title" content="Immersive Workshop"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" content="https://immersive.marpi.pl/assets/image.jpg"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                margin: 0px;
+                overflow: hidden;
+                background-color: #000000;
+            }
+        </style>
+    </head>
+    <body>
+
+        <script src="js/third-party/threejs/three.js"></script>
+
+        <script>
+            // setup scene and camera
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+            // setup render to screen
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize( window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // setup object and add to scene
+            var geometry = new THREE.BoxGeometry(1,1,1);
+            var material = new THREE.MeshBasicMaterial({color: 0xffffff});
+            var cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            // position camera
+            camera.position.z = 5;
+
+            // run 60 times per second
+            var render = function(){
+                requestAnimationFrame(render);
+
+                cube.rotation.x += 0.1;
+                cube.rotation.y += 0.1;
+
+                renderer.render(scene,camera);
+            };
+
+            render();
+
+        </script>
+    </body>
+</html>
