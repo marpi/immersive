@@ -129,15 +129,15 @@
                 var _y = 0
                 var _z = 0
 
-                var maxLines = 40
-                var maxElementsInLine = 100
+                var maxLines = 30
+                var maxElementsInLine = 70
 
                 for (var j = 0; j <= maxLines; j++) {
                     var last = group
                     for (var i = 0; i <= maxElementsInLine; i++) {
                         var mesh = new THREE.Mesh(geo, material)
                         
-                        _y = .1;
+                        _y = .15;
 
                         mesh.rotation.set(.2, .2, .2)
                         if (i != 0) {
