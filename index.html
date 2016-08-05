@@ -31,8 +31,9 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer, material, geometry;
+            var camera, scene, renderer, material, geometry, sgeometry, originalgGeometry;
             var mobile = false;
+            var texture
 
             init();
             setup();
@@ -79,7 +80,7 @@
             }
 
             function setup() {
-                var cubeMap = getCubeMap(10)
+                var cubeMap = getCubeMap(0)
 
                 var cubeShader = THREE.ShaderLib['cube'];
                 cubeShader.uniforms['tCube'].value = cubeMap;
@@ -95,34 +96,37 @@
                 var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
 
                 scene.add(skyBox);
-        
-        
 
-                var texture = new THREE.TextureLoader().load("assets/textures/immersive.jpg");
+                texture = new THREE.TextureLoader().load("assets/textures/donut.jpg");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(1, 1);
+                texture.repeat.set(2, 2);
 
-                geometry = new THREE.SphereGeometry(.5, 20, 20)
+                //geometry = new THREE.SphereGeometry(.5, 20, 20)
 
-                for (var i = 0; i < geometry.vertices.length; i++) {
-                    var v = geometry.vertices[i]
-                    console.log(v)
-                    var random = Math.random()
-                    v.x *= .1 + .5 * random;
-                    v.y *= .1 + .5 * random;
-                    v.z *= .1 + .5 * random;
-                }
-                
-                material = new THREE.MeshPhongMaterial({envMap:cubeMap,shading:THREE.FlatShading});
+                //material = new THREE.MeshPhongMaterial({envMap:cubeMap,shading:THREE.FlatShading});
 
-                var smaterial = new THREE.MeshBasicMaterial({map: texture, side:THREE.DoubleSide});//map:texture,
+                var smaterial = new THREE.MeshStandardMaterial({
+                    envMap: cubeMap,
+                    map: texture,
+                    //bumpMap: texture,
+                    //color:0xFF0000,
+                    shading: THREE.FlatShading,
+                    side: THREE.DoubleSide,
+                    //wireframe:true,
+                });//map:texture,
 
                 // central object
 
-                var sgeometry = new THREE.SphereGeometry(5, 20, 20)//new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                sgeometry = new THREE.TorusGeometry(1.24, 0.55, 15, 16);
+                originalgGeometry = new THREE.TorusGeometry(1.24, 0.55, 15, 16);
+                //var sgeometry = new THREE.PlaneGeometry(10,10);
+
+
+
+
                 var object = new THREE.Mesh(sgeometry, smaterial);
-                //scene.add(object);
+                scene.add(object);
 
                 // cubes
 
@@ -164,52 +168,28 @@
             }
 
             function remove(object) {
-                //console.log('remove',object)
                 scene.remove(object)
             }
 
             var num = 0
+            var time = 0;
             function render() {
                 requestAnimationFrame(render);
 
-                num++
-                if (num == 3) {
-                    num = 0
-                    for (var i = 0; i < 1; i++) {
-                        //new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
-                        var object = new THREE.Mesh(geometry, material);
-                        object.position.set((Math.random() - .5) * 100, (Math.random() - .5) * 100, (Math.random() - .5) * 100)
+                time += 1
+                texture.offset.y = time / 10000;
 
-                        var ease = Expo.easeOut
-
-                        TweenMax.to(object.position, 10,
-                                {
-                                    x: 0,
-                                    y: 0,
-                                    z: 0,
-                                    onComplete: remove,
-                                    onCompleteParams: [object],
-                                    ease: ease
-                                }
-                        )
-                        TweenMax.to(object.rotation, 10,
-                                {
-                                    x: Math.random() * Math.PI * 10,
-                                    y: Math.random() * Math.PI * 10,
-                                    z: Math.random() * Math.PI * 10,
-                                    ease: ease
-                                }
-                        )
-
-
-
-                        scene.add(object);
-                    }
+                for (var i = 0; i < sgeometry.vertices.length; i++) {
+                    var v = sgeometry.vertices[i]
+                    var ov = originalgGeometry.vertices[i];
+                    var sin = (Math.sin(time / 100 + i / 10) + 1) / 2
+                    var random = Math.random()
+                    v.x = ov.x + .2 * sin;
+                    v.y = ov.y + .2 * sin;
+                    v.z = ov.z + .2 * sin;
                 }
-
-                //num++
-                //if(num==2){
-                //    num=0
+                sgeometry.verticesNeedUpdate = true;
+                
                 controls.update();
 
                 if (mobile) {
@@ -217,7 +197,6 @@
                     camera.translateZ(10);
                 }
                 renderer.render(scene, camera);
-                //}
 
             }
 
