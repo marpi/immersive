@@ -97,7 +97,7 @@
 
                 scene.add(skyBox);
 
-                texture = new THREE.TextureLoader().load("assets/textures/donut.jpg");
+                texture = new THREE.TextureLoader().load("assets/textures/runningcat.png");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(2, 2);
@@ -177,7 +177,11 @@
                 requestAnimationFrame(render);
 
                 time += 1
-                texture.offset.y = time / 10000;
+                num++
+                if(num>10){
+                    num=0
+                    texture.offset.y += .25//time / 10000;
+                }
 
                 for (var i = 0; i < sgeometry.vertices.length; i++) {
                     var v = sgeometry.vertices[i]
