@@ -97,10 +97,10 @@
 
                 scene.add(skyBox);
 
-                texture = new THREE.TextureLoader().load("assets/textures/runningcat.png");
+                texture = new THREE.TextureLoader().load("assets/sheep-gif1-white.png");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(2, 2);
+                texture.repeat.set(1,1/4);
 
                 //geometry = new THREE.SphereGeometry(.5, 20, 20)
 
@@ -113,6 +113,7 @@
                     //color:0xFF0000,
                     shading: THREE.FlatShading,
                     side: THREE.DoubleSide,
+                    transparent:true,
                     //wireframe:true,
                 });//map:texture,
 
@@ -120,7 +121,7 @@
 
                 sgeometry = new THREE.TorusGeometry(1.24, 0.55, 15, 16);
                 originalgGeometry = new THREE.TorusGeometry(1.24, 0.55, 15, 16);
-                //var sgeometry = new THREE.PlaneGeometry(10,10);
+                sgeometry = new THREE.PlaneGeometry(10,10);
 
 
 
@@ -183,7 +184,7 @@
                     texture.offset.y += .25//time / 10000;
                 }
 
-                for (var i = 0; i < sgeometry.vertices.length; i++) {
+                /*for (var i = 0; i < sgeometry.vertices.length; i++) {
                     var v = sgeometry.vertices[i]
                     var ov = originalgGeometry.vertices[i];
                     var sin = (Math.sin(time / 100 + i / 10) + 1) / 2
@@ -192,7 +193,7 @@
                     v.y = ov.y + .2 * sin;
                     v.z = ov.z + .2 * sin;
                 }
-                sgeometry.verticesNeedUpdate = true;
+                sgeometry.verticesNeedUpdate = true;*/
                 
                 controls.update();
 
