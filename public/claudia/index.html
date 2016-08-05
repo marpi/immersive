@@ -25,9 +25,9 @@
         <script src="js/third-party/threejs/controls/VRControls.js"></script>
         <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
         <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
-        
+
         <script src="js/third-party/TweenMax.min.js"></script>
-        
+
         <script src="js/utils/helpers.js"></script>
 
         <script>
@@ -78,13 +78,13 @@
             }
 
             function setup() {
-                
+
                 // central object
 
-                var geometry = new THREE.TorusKnotGeometry(0.64, 0.25, 25, 6);
-                var material = new THREE.MeshPhongMaterial({shading: THREE.FlatShading});
-                var object = new THREE.Mesh(geometry, material);
-                scene.add(object);
+                var geometry = new THREE.OctahedronGeometry( 1, 1 );
+          			var material = new THREE.MeshNormalMaterial( { color: 0x880088 } );
+          			var prism = new THREE.Mesh( geometry, material );
+          			scene.add( prism );
 
                 // cubes
 
