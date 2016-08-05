@@ -33,65 +33,99 @@
         <script>
             var camera, scene, renderer, material, geometry;
             var mobile = false;
-            var group;
+            
             init();
             setup();
             render();
+            
             function init() {
+
                 // renderer
+                
                 renderer = new THREE.WebGLRenderer({antialias: true});
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 document.body.appendChild(renderer.domElement);
+
                 // scene
+
                 scene = new THREE.Scene();
+
                 // camera
-                camera = new THREE.PerspectiveCamera(95, window.innerWidth / window.innerHeight, .1, 1000);
-                camera.position.set(0, 0, 5.001);
+
+                camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, .1, 1000);
+                camera.position.set(0, 0, 3);
                 camera.focalLength = camera.position.distanceTo(scene.position);
                 scene.add(camera)
+
                 // controls
+
                 controls = new THREE.OrbitControls(camera);
                 controls.autoRotate = true;
+
                 controls.maxDistance=5
+
                 if (WEBVR.isAvailable() === true) {
                     controls = new THREE.VRControls(camera);
                     controls.standing = false;
+
                     renderer = new THREE.VREffect(renderer);
                     document.body.appendChild(WEBVR.getButton(renderer));
-
-
                 }
+
                 // events
+
                 window.addEventListener('deviceorientation', setOrientationControls, true);
                 window.addEventListener('resize', onWindowResize, false);
             }
 
 
             function setup() {
-                var cubeMap = getCubeMap(6)
+                // var cubeMap = getCubeMap(6)
+
+                // var cubeShader = THREE.ShaderLib['cube'];
+                // cubeShader.uniforms['tCube'].value = cubeMap;
+                // var skyBoxMaterial = new THREE.ShaderMaterial({
+                //     fragmentShader: cubeShader.fragmentShader,
+                //     vertexShader: cubeShader.vertexShader,
+                //     uniforms: cubeShader.uniforms,
+                //     depthWrite: false,
+                //     side: THREE.BackSide
+                // });
+                // var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
+                // scene.add(skyBox);
+
                 
-                var texture = new THREE.TextureLoader().load("assets/sutro-forest.jpg");
+                var texture = new THREE.TextureLoader().load("assets/sutro-forest.JPG");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(1, 1);               
-            
-                var material = new THREE.MeshBasicMaterial({map:texture, side:THREE.DoubleSide});
 
+// RANDOM OBJECTS NOT WORKING
 
-               
-               
-                
+                // geometry = new THREE.SphereGeometry(.5, 20, 20)
+
+                //  for (var i = 0; i < geometry.vertices.length; i++) {
+                //     var v = geometry.vertices[i]
+                //     console.log(v)
+                //     var random = Math.random()
+                //     v.x *= .1 + .5 * random;
+                //     v.y *= .1 + .5 * random;
+                //     v.z *= .1 + .5 * random;
+                // }
+
+                material = new THREE.MeshBasicMaterial({map:texture, side:THREE.DoubleSide});
+
     
                 // central object
                 
 
-                var geometry = new THREE.SphereGeometry(5, 20, 20)
+                geometry = new THREE.SphereGeometry(5, 20, 20)
                 var object = new THREE.Mesh(geometry, material); 
                 scene.add(object);
                
 
-                //cubes
+                // cubes
 
                 group = new THREE.Object3D();
                 for (var _x = -4; _x <= 4; _x++) {
@@ -99,6 +133,7 @@
                         for (var _z = -4; _z <= 4; _z++) {
                             var geo = new THREE.CubeGeometry(.1, .1, .1)
                             var mesh = new THREE.Mesh(geo)
+                            
                             mesh.position.set(_x, _y, _z)
                             mesh.rotation.x = _x / 10
                             mesh.rotation.y = 0
@@ -106,36 +141,83 @@
                             mesh.scale.x = 1
                             mesh.scale.y = 1
                             mesh.scale.z = 1
+                        
                             group.add(mesh);
                         }
                     }
                 }
 
-                //merge
+                // merge
 
                 var geom = new THREE.Geometry()
                 for (var i = 0; i < group.children.length; i++) {
                     group.children[i].updateMatrix();
                     geom.merge(group.children[i].geometry, group.children[i].matrix);
                 }
-                var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.FlatShading, wireframe: true});
+
+                var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.flatShading, wireframe: true});
                 group = new THREE.Mesh(geom);
                 scene.add(group)
 
                 // light
 
-                var light = new THREE.DirectionalLight(0xffffff);
-                light.position.set(-1, 1.5, 0.5);
+                var light = new THREE.DirectionalLight(0xFF0B00);
                 scene.add(light);
+
             }
+
+// ANIMATION NOT WORKING
+
+            // function remove(object) {
+            //     //console.log('remove',object)
+            //     scene.remove(object)
+            // }
+
+            var num = 0
 
             function render() {
                 requestAnimationFrame(render);
+
+// ANIMATION NOT WORKING
+                // num++
+                //  if (num == 3) {
+                //     num = 0
+                //     for (var i = 0; i < 1; i++) {
+                //         //new THREE.TorusKnotGeometry(0.64, 0.55, 25, 6);
+                //         var object = new THREE.Mesh(geometry, material);
+                //         object.position.set((Math.random() - .5) * 100, (Math.random() - .5) * 100, (Math.random() - .5) * 100)
+                //         var ease = Expo.easeOut
+                //         TweenMax.to(object.position, 10,
+                //                 {
+                //                     x: 0,
+                //                     y: 0,
+                //                     z: 0,
+                //                     onComplete: remove,
+                //                     onCompleteParams: [object],
+                //                     ease: ease
+                //                 }
+                //         )
+                //         TweenMax.to(object.rotation, 10,
+                //                 {
+                //                     x: Math.random() * Math.PI * 10,
+                //                     y: Math.random() * Math.PI * 10,
+                //                     z: Math.random() * Math.PI * 10,
+                //                     ease: ease
+                //                 }
+                //         )
+
+
+                //     scene.add(object);
+                //     }
+                // }
+
                 controls.update();
+
                 if (mobile) {
                     camera.position.set(0, 0, 0)
                     camera.translateZ(0);
                 }
+
                 renderer.render(scene, camera);
             }
         </script>
