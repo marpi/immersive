@@ -35,14 +35,17 @@ var radius = 50,
     segments = 16,
     rings = 16;
 
-// create the sphere's material
-var sphereMaterial = new THREE.MeshLambertMaterial({ color: 0xCC0000 });
+// texture
+var texture = new THREE.TextureLoader().load("assets/textures/drake.jpg");
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.repeat.set(1, 1);
 
-// create a new mesh with
-// sphere geometry - we will cover
-// the sphereMaterial next!
+var material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+
+// shape
 var sphereGeo = new THREE.SphereGeometry(radius, segments, rings);
-var sphere = new THREE.Mesh(sphereGeo, sphereMaterial);
+var sphere = new THREE.Mesh(sphereGeo, material);
 
 // add the sphere to the scene
 scene.add(sphere);
