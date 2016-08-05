@@ -4,9 +4,16 @@
 
 ### How to run
 
-In order to run the project you need a local server. You can use MAMP:
+In order to run the project you need a local server. You can use Browsersync:
 
-[https://www.mamp.info/](https://www.mamp.info/)
+[https://www.browsersync.io/](https://www.browsersync.io/)
+
+```sh
+# Install Browsersync
+npm i -g browser-sync
+# Run Browsersync from the folder you want to serve
+browser-sync start --directory -s -f .
+```
 
 Or run Python's built-in http server.
 In terminal, browse to the repo and run:
