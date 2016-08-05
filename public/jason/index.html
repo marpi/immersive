@@ -81,20 +81,6 @@
 
 
             function setup() {
-                // var cubeMap = getCubeMap(6)
-
-                // var cubeShader = THREE.ShaderLib['cube'];
-                // cubeShader.uniforms['tCube'].value = cubeMap;
-                // var skyBoxMaterial = new THREE.ShaderMaterial({
-                //     fragmentShader: cubeShader.fragmentShader,
-                //     vertexShader: cubeShader.vertexShader,
-                //     uniforms: cubeShader.uniforms,
-                //     depthWrite: false,
-                //     side: THREE.BackSide
-                // });
-                // var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
-                // scene.add(skyBox);
-
                 
                 var texture = new THREE.TextureLoader().load("assets/sutro-forest.JPG");
                 texture.wrapS = THREE.RepeatWrapping;
@@ -114,7 +100,7 @@
                 //     v.z *= .1 + .5 * random;
                 // }
 
-                material = new THREE.MeshBasicMaterial({map:texture, side:THREE.DoubleSide});
+                material = new THREE.MeshPhongMaterial({map:texture, side:THREE.DoubleSide});
 
     
                 // central object
@@ -128,41 +114,34 @@
                 // cubes
 
                 group = new THREE.Object3D();
+                    
+                    
                 for (var _x = -4; _x <= 4; _x++) {
-                    for (var _y = -4; _y <= 4; _y++) {
-                        for (var _z = -4; _z <= 4; _z++) {
-                            var geo = new THREE.CubeGeometry(.1, .1, .1)
+                    
+                            var geo = new THREE.CubeGeometry(1, 1, 1)
                             var mesh = new THREE.Mesh(geo)
-                            
-                            mesh.position.set(_x, _y, _z)
-                            mesh.rotation.x = _x / 10
-                            mesh.rotation.y = 0
-                            mesh.rotation.z = _x / 10
-                            mesh.scale.x = 1
-                            mesh.scale.y = 1
-                            mesh.scale.z = 1
-                        
                             group.add(mesh);
-                        }
-                    }
+                        
+                
                 }
 
                 // merge
 
-                var geom = new THREE.Geometry()
+                var geom = new THREE.Geometry();
                 for (var i = 0; i < group.children.length; i++) {
                     group.children[i].updateMatrix();
                     geom.merge(group.children[i].geometry, group.children[i].matrix);
                 }
 
-                var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.flatShading, wireframe: true});
                 group = new THREE.Mesh(geom);
                 scene.add(group)
 
                 // light
 
-                var light = new THREE.DirectionalLight(0xFF0B00);
-                scene.add(light);
+                var light = new THREE.DirectionalLight(0xffffff);
+                light.position.set(0, 100, 350);
+                camera.add(light);
+                light.target = camera;
 
             }
 
