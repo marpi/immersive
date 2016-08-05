@@ -166,6 +166,10 @@
                 //pointlight.position.x = 10
                 //camera.add(pointlight)
 
+                setInterval(updateTexture,1000/4)
+            }
+            function updateTexture(){
+                texture.offset.y += .25
             }
 
             function remove(object) {
@@ -178,11 +182,6 @@
                 requestAnimationFrame(render);
 
                 time += 1
-                num++
-                if(num>10){
-                    num=0
-                    texture.offset.y += .25//time / 10000;
-                }
 
                 /*for (var i = 0; i < sgeometry.vertices.length; i++) {
                     var v = sgeometry.vertices[i]
