@@ -58,5 +58,11 @@ pointLight.position.z = 130;
 // add to the scene
 scene.add(pointLight);
 
+var render = function () {
+  requestAnimationFrame( render );
+  sphere.rotation.y += 0.02;
+  renderer.render( scene, camera );
+};
+
 // draw!
-renderer.render(scene, camera);
+render();
