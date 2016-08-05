@@ -37,11 +37,12 @@ var radius = 50,
 
 // texture
 var texture = new THREE.TextureLoader().load("assets/textures/drake.jpg");
-texture.wrapS = THREE.RepeatWrapping;
-texture.wrapT = THREE.RepeatWrapping;
+// texture.wrapS = THREE.RepeatWrapping;
+// texture.wrapT = THREE.RepeatWrapping;
 texture.repeat.set(1, 1);
 
 var material = new THREE.MeshBasicMaterial({map: texture, side: THREE.DoubleSide});
+
 
 // shape
 var sphereGeo = new THREE.SphereGeometry(radius, segments, rings);
@@ -61,8 +62,13 @@ pointLight.position.z = 130;
 // add to the scene
 scene.add(pointLight);
 
+
+// controls
+var controls = new THREE.OrbitControls(camera);
+
 var render = function () {
   requestAnimationFrame( render );
+  controls.update();
   sphere.rotation.y += 0.02;
   renderer.render( scene, camera );
 };
