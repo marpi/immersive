@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Immersive Workshop</title>
+        <meta charset="utf-8">
+        <meta property="og:title" content="Immersive Workshop"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" content="https://immersive.marpi.pl/assets/image.jpg"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                margin: 0px;
+                overflow: hidden;
+                background-color: #000000;
+            }
+        </style>
+    </head>
+    <body>
+        
+  <script language="javascript" type="text/javascript" src="js/third-party/p5.js"></script>
+  <!-- uncomment lines below to include extra p5 libraries -->
+  <!--<script language="javascript" src="libraries/p5.dom.js"></script>-->
+  <!--<script language="javascript" src="libraries/p5.sound.js"></script>-->
+  <script language="javascript" type="text/javascript" src="js/sketch.js"></script>
+  
+        <script src="js/third-party/threejs/three.js"></script>
+        <script src="js/third-party/threejs/WebVR.js"></script>
+        <script src="js/third-party/threejs/effects/VREffect.js"></script>
+        <script src="js/third-party/threejs/effects/StereoEffect.js"></script>
+
+        <script src="js/third-party/threejs/controls/VRControls.js"></script>
+        <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
+        <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
+
+        <script src="js/third-party/TweenMax.min.js"></script>
+
+        <script src="js/utils/helpers.js"></script>
+
+        <script>
+            var threeCamera, scene, renderer, material, geometry, sgeometry, originalgGeometry;
+            var mobile = false;
+            var threeTexture
+            var group;
+
+            init();
+            threeSetup();
+            render();
+
+            function init() {
+
+                // renderer
+
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                // scene
+
+                scene = new THREE.Scene();
+
+                // camera
+
+                threeCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
+                threeCamera.position.set(0, 0, 1.5);
+                threeCamera.focalLength = threeCamera.position.distanceTo(scene.position);
+                scene.add(threeCamera)
+
+                // controls
+
+                controls = new THREE.OrbitControls(threeCamera);
+                controls.autoRotate = true;
+
+                if (WEBVR.isAvailable() === true) {
+                    controls = new THREE.VRControls(threeCamera);
+                    controls.standing = false;
+
+                    renderer = new THREE.VREffect(renderer);
+                    document.body.appendChild(WEBVR.getButton(renderer));
+                }
+
+                // events
+
+                window.addEventListener('deviceorientation', setOrientationControls, true);
+                window.addEventListener('resize', onWindowResize, false);
+
+            }
+
+            function threeSetup() {
+                var cubeMap = getCubeMap(8)
+
+                var cubeShader = THREE.ShaderLib['cube'];
+                cubeShader.uniforms['tCube'].value = cubeMap;
+
+                var skyBoxMaterial = new THREE.ShaderMaterial({
+                    fragmentShader: cubeShader.fragmentShader,
+                    vertexShader: cubeShader.vertexShader,
+                    uniforms: cubeShader.uniforms,
+                    depthWrite: false,
+                    side: THREE.BackSide
+                });
+
+                var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
+
+                scene.add(skyBox);
+
+                threeTexture = new THREE.TextureLoader().load("assets/sheep-gif1-white.png");
+                threeTexture.wrapS = THREE.RepeatWrapping;
+                threeTexture.wrapT = THREE.RepeatWrapping;
+                threeTexture.repeat.set(1, 1 / 4);
+
+                //geometry = new THREE.SphereGeometry(.5, 20, 20)
+
+                material = new THREE.MeshPhongMaterial({color:0xffffff,reflectivity: .5, envMap: cubeMap, shading: THREE.FlatShading});
+
+
+                // cubes
+                var geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
+
+                group = new THREE.Object3D();
+                for (var i = 0; i<100;i++) {
+                            var mesh = new THREE.Mesh(geo, material)
+
+                            //mesh.position.set(_x * .1, _y * .1, _z * .1)
+                            //mesh.rotation.set(Math.random(), Math.random(), Math.random())
+                            //mesh.scale.set(Math.random() * 5, Math.random() * 5, Math.random() * 5)
+
+                            group.add(mesh);
+                }
+
+                /*var _x = 0
+                 var _y = 0
+                 var _z = 0
+                 
+                 var maxLines = 30
+                 var maxElementsInLine = 70
+                 
+                 for (var j = 0; j <= maxLines; j++) {
+                 var last = group
+                 for (var i = 0; i <= maxElementsInLine; i++) {
+                 var mesh = new THREE.Mesh(geo, material)
+                 
+                 _y = .15;
+                 
+                 mesh.rotation.set(.2, .2, .2)
+                 if (i != 0) {
+                 mesh.position.set(_x, _y, _z)
+                 } else {
+                 mesh.rotation.set(j,j,j)
+                 }
+                 mesh.scale.set(1 - i / maxElementsInLine+.1, 1 - i / maxElementsInLine+.1, 1 - i / maxElementsInLine+.1)
+                 
+                 last.add(mesh);
+                 last = mesh;
+                 }
+                 }*/
+                scene.add(group)
+                // merge
+
+                /*var geom = new THREE.Geometry()
+                 for (var i = 0; i < group.children.length; i++) {
+                 group.children[i].updateMatrix();
+                 geom.merge(group.children[i].geometry, group.children[i].matrix);
+                 }
+                 group = new THREE.Mesh(geom, material);
+                 scene.add(group)*/
+
+                // light
+
+                var light = new THREE.AmbientLight(0x999999);
+                scene.add(light);
+
+                var pointlight = new THREE.DirectionalLight(0xFFffff, 1, 10)
+                //pointlight.position.x = 10
+                threeCamera.add(pointlight)
+
+                //animate()
+            }
+
+            function animate() {
+                /*TweenMax.delayedCall(3, animate)
+
+                for (var i = 0; i < group.children.length; i++) {
+                    var c = group.children[i]
+                    TweenMax.to(c.scale, .3, {delay: .6*i / group.children.length + .6*Math.random(), x: .5, y: .5, z: .5})
+                    TweenMax.to(c.scale, .3, {delay: 1 + .6*i / group.children.length + .6*Math.random(), x: 1, y: 1, z: 1})
+
+                    TweenMax.to(c.rotation, .3, {delay: .6*i / group.children.length + .6*Math.random(), x: Math.random(), y: Math.random(), z: Math.random()})
+                    TweenMax.to(c.rotation, .3, {delay: 1 + .6*i / group.children.length + .6*Math.random(), x: 0, y: 0, z: 0})
+                }*/
+            }
+
+            var num = 0
+            var time = 0;
+            function render() {
+                requestAnimationFrame(render);
+
+                time += 1
+                
+                
+                for (var i = 0; i<boids.length;i++) {
+                    var c = group.children[i]
+                    c.position.x=boids[i].position.x/100-300/100
+                    c.position.y=boids[i].position.y/100-150/100
+                }
+
+                controls.update();
+
+                if (mobile) {
+                    threeCamera.position.set(0, 0, 0)
+                    threeCamera.translateZ(10);
+                }
+                renderer.render(scene, threeCamera);
+
+            }
+
+        </script>
+    </body>
+</html>
