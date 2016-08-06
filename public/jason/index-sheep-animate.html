@@ -105,9 +105,9 @@
                 for (i = 0; i < 10000; i++) {
 
                     var vertex = new THREE.Triangle(); // Why can't I change the rotation?
-                    vertex.x = Math.floor(Math.random() * 200 - 100) * 10;
-                    vertex.y = Math.floor(Math.random() * 200 - 100) * 10;
-                    vertex.z = Math.floor(i / 10000 * 200 - 100) * 10;
+                    vertex.x = (Math.random() - .5) * 2000;
+                    vertex.y = (Math.random() - .5) * 2000;
+                    vertex.z = (Math.random() - .5) * 2000;
 
                     geometry.vertices.push(vertex);
 
