@@ -50,7 +50,7 @@
 
 
             var container, stats;
-            var texture;
+            var texture, allGroups = [];
             var camera, scene, renderer, particles, geometry, materials = [], parameters, i, h, color, sprite, size;
             var mouseX = 0, mouseY = 0;
 
@@ -75,8 +75,8 @@
 
                 camera = new THREE.PerspectiveCamera(1015, window.innerWidth / window.innerHeight, 1, 2000);
                 camera.position.x = 10;
-                
-                
+
+
                 controls = new THREE.OrbitControls(camera);
 
                 geometry = new THREE.Geometry();
@@ -86,20 +86,20 @@
 
                 // My animated animals
 
-                texture = new THREE.TextureLoader().load("assets/sheep/sheep-gif1-white.png");
+                /*texture = new THREE.TextureLoader().load("assets/sheep/sheep-gif1-white.png");
+                 texture.wrapS = THREE.RepeatWrapping;
+                 texture.wrapT = THREE.RepeatWrapping;
+                 texture.repeat.set(1, 1 / 4);*/
+
+                texture = new THREE.TextureLoader().load("assets/sheep/sheep-gif1-500px.png");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(1, 1 / 4);
+                texture.repeat.set(1 / 11, 1); //zoom in eleven times
 
-                // texture = new THREE.TextureLoader().load("assets/sheep/sheep-gif1-500px.png");
-                //             texture.wrapS = THREE.RepeatWrapping;
-                //             texture.wrapT = THREE.RepeatWrapping;
-                //             texture.repeat.set(1/11,1);
-
-                //             texture2 = new THREE.TextureLoader().load("assets/sheep/sheep-gif2-500px.png");
-                //             texture2.wrapS = THREE.RepeatWrapping;
-                //             texture2.wrapT = THREE.RepeatWrapping;
-                //             texture2.repeat.set(1/4,1);
+                texture2 = new THREE.TextureLoader().load("assets/sheep/sheep-gif2-500px.png");
+                texture2.wrapS = THREE.RepeatWrapping;
+                texture2.wrapT = THREE.RepeatWrapping;
+                texture2.repeat.set(1 / 4, 1);
 
 
                 for (i = 0; i < 10000; i++) {
@@ -107,7 +107,7 @@
                     var vertex = new THREE.Triangle(); // Why can't I change the rotation?
                     vertex.x = Math.floor(Math.random() * 200 - 100) * 10;
                     vertex.y = Math.floor(Math.random() * 200 - 100) * 10;
-                    vertex.z = Math.floor(i/10000 * 200 - 100) * 10;
+                    vertex.z = Math.floor(i / 10000 * 200 - 100) * 10;
 
                     geometry.vertices.push(vertex);
 
@@ -115,7 +115,7 @@
 
                 parameters = [
                     [[1.0, 0.2, 500], texture, 55],
-                            // [ [5, 5, 1], texture2, 15 ],
+                    [[5, 5, 1], texture2, 15],
                             // [ [0.90, 0.05, 1], sprite1, 10 ],
                             // [ [0.85, 0, 1], sprite5, 8 ],
                             // [ [0.80, 0, 1], sprite4, 5 ]
@@ -131,6 +131,8 @@
                     // materials[i].color.setHSL( color[0], color[1], color[2] );
 
                     particles = new THREE.Points(geometry, materials[i]);
+
+                    particles.rotation.y = i
                     //particles.rotation.y=-Math.PI
 
                     // particles.rotation.x = Math.random() * 6;
@@ -138,6 +140,7 @@
                     // particles.rotation.z = Math.random() * 6;
 
                     scene.add(particles);
+                    allGroups.push(particles)
 
                 }
 
@@ -152,6 +155,30 @@
                 //
                 window.addEventListener('resize', onWindowResize, false);
 
+                setInterval(updateSpriteSheets, 1000 / 10) //frames pers second
+
+                animateGroup()
+            }
+
+            function animateGroup() {
+                TweenMax.delayedCall(3, animateGroup)
+
+                var ease = Back.easeInOut;
+
+                for (var i = 0; i < allGroups.length; i++) {
+                    TweenMax.to(allGroups[i].position, 3, {
+                        delay:i/2,
+                        x: (Math.random() - .5) * 1000,
+                        y: (Math.random() - .5) * 1000,
+                        z: (Math.random() - .5) * 1000,
+                        ease: ease
+                    });
+                }
+            }
+
+            function updateSpriteSheets() {
+                texture.offset.x += 1 / 11 //move right one eleventh of the texture
+                texture2.offset.x += 1 / 4 //move right one forth of the texture
             }
 
             function onWindowResize() {
@@ -163,27 +190,12 @@
                 camera.updateProjectionMatrix();
 
                 renderer.setSize(window.innerWidth, window.innerHeight);
-
             }
-
-
-
-            //
-            var num = 0
-            var time = 0;
 
             function animate() {
 
                 requestAnimationFrame(animate);
-                time += 1
-                num++
-                if (num > 10) {
-                    num = 0
-                    texture.offset.y += .25//time / 10000;
-                }
-
                 render();
-                // stats.update();
 
             }
 
@@ -195,6 +207,10 @@
 
                 //camera.position.x += (mouseX - camera.position.x) * 0.05*10;
                 //camera.position.y += (-mouseY - camera.position.y) * 0.05*10;
+
+                /*for (var i=0;i<allGroups.length;i++){
+                 allGroups[i].position.x+=i-.5
+                 }*/
 
                 camera.lookAt(scene.position);
 
