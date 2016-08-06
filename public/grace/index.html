@@ -25,15 +25,15 @@
         <script src="js/third-party/threejs/controls/VRControls.js"></script>
         <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
         <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
-        
+
         <script src="js/third-party/TweenMax.min.js"></script>
         <script src="js/third-party/dat.gui.min.js"></script>
-        
+
         <script src="js/utils/helpers.js"></script>
 
         <script>
             var camera, scene, renderer, material, geometry, sgeometry, originalgGeometry;
-            var gui, guiControl;
+            var gui, guiControl, object
             var mobile = false;
             var texture
             init();
@@ -54,15 +54,19 @@
                 scene.add(camera)
                 // controls
                 gui = new dat.GUI();
-                guiControl = new function(){
+                guiControl = new function () {
                     this.shimmer = 0.1;
                     this.p = 5;
                     this.q = 5;
                 }
-                
+
                 gui.add(guiControl, 'shimmer', 0, 0.5);
-                gui.add(guiControl, 'p', 0, 20);
-                gui.add(guiControl, 'q', 0, 20);
+                gui.add(guiControl, 'p', 0, 20).onChange(function () {
+                    changeGeometry();
+                });
+                gui.add(guiControl, 'q', 0, 20).onChange(function () {
+                    changeGeometry();
+                });
 
                 controls = new THREE.OrbitControls(camera);
                 // controls.autoRotate = true;
@@ -75,6 +79,13 @@
                 // events
                 window.addEventListener('deviceorientation', setOrientationControls, true);
                 window.addEventListener('resize', onWindowResize, false);
+            }
+
+            function changeGeometry() {
+                sgeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, Math.round(guiControl.p), Math.round(guiControl.q));
+                originalgGeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, Math.round(guiControl.p), Math.round(guiControl.q));
+                object.geometry = sgeometry;
+                object.material.color = new THREE.Color(0xFFFFFF*Math.random())
             }
             function setup() {
                 var cubeMap = getCubeMap(3)
@@ -101,10 +112,10 @@
                 });
                 // central object
 
-                       
+
                 sgeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, guiControl.p, guiControl.q);
                 originalgGeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, guiControl.p, guiControl.q);
-                var object = new THREE.Mesh(sgeometry, smaterial);
+                object = new THREE.Mesh(sgeometry, smaterial);
                 scene.add(object);
 
                 // light
@@ -130,7 +141,7 @@
                     v.z = ov.z + guiControl.shimmer * random;
                 }
                 sgeometry.verticesNeedUpdate = true;
-                
+
                 controls.update();
                 if (mobile) {
                     camera.position.set(0, 0, 0)
