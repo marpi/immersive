@@ -33,15 +33,15 @@
         <script>
             var camera, scene, renderer, material, geometry;
             var mobile = false;
-            
+
             init();
             setup();
             render();
-            
+
             function init() {
 
                 // renderer
-                
+
                 renderer = new THREE.WebGLRenderer({antialias: true});
                 renderer.setPixelRatio(window.devicePixelRatio);
                 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -63,7 +63,7 @@
                 controls = new THREE.OrbitControls(camera);
                 controls.autoRotate = true;
 
-                controls.maxDistance=5
+                controls.maxDistance = 5
 
                 if (WEBVR.isAvailable() === true) {
                     controls = new THREE.VRControls(camera);
@@ -81,56 +81,56 @@
 
 
             function setup() {
-                
+
                 var texture = new THREE.TextureLoader().load("assets/sutro-forest.JPG");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(1, 1);               
+                texture.repeat.set(1, 1);
 
-                material = new THREE.MeshBasicMaterial({map:texture, side:THREE.DoubleSide});
+                material = new THREE.MeshPhongMaterial({map: texture, side: THREE.DoubleSide});
 
-    
+
                 // central object
-                
+
 
                 geometry = new THREE.SphereGeometry(5, 20, 20)
-                var object = new THREE.Mesh(geometry, material); 
+                var object = new THREE.Mesh(geometry, material);
                 scene.add(object);
-               
+
 
                 // cubes
 
                 group = new THREE.Object3D();
-                        
-                        
-                var cubeMap=getCubeMap(11)
-                    
+
+
+                var cubeMap = getCubeMap(11)
+
                 for (var _x = -2; _x <= 2; _x++) {
-                            var cubeMaterial = new THREE.MeshPhongMaterial({shading:THREE.FlatShading,envMap:cubeMap,color:0xFFFFFF, side:THREE.DoubleSide});
-                            var geo = new THREE.SphereGeometry(.4, 20, 20)//new THREE.CubeGeometry(.1, .1, .1)
-                            var mesh = new THREE.Mesh(geo,cubeMaterial)
-                            mesh.position.x=_x;
-                            group.add(mesh);                
+                    var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.FlatShading, envMap: cubeMap, color: 0xFFFFFF, side: THREE.DoubleSide});
+                    var geo = new THREE.SphereGeometry(.4, 20, 20)//new THREE.CubeGeometry(.1, .1, .1)
+                    var mesh = new THREE.Mesh(geo, cubeMaterial)
+                    mesh.position.x = _x;
+                    group.add(mesh);
                 }
 
                 // merge
 
                 /*var geom = new THREE.Geometry();
-                for (var i = 0; i < group.children.length; i++) {
-                    group.children[i].updateMatrix();
-                    geom.merge(group.children[i].geometry, group.children[i].matrix);
-                }
-
-                group = new THREE.Mesh(geom,group.children[0].material);
-                */
-               scene.add(group)
+                 for (var i = 0; i < group.children.length; i++) {
+                 group.children[i].updateMatrix();
+                 geom.merge(group.children[i].geometry, group.children[i].matrix);
+                 }
+                 
+                 group = new THREE.Mesh(geom,group.children[0].material);
+                 */
+                scene.add(group)
 
                 // light
 
                 var light = new THREE.DirectionalLight(0xffffff);
                 light.position.set(0, 100, 350);
                 camera.add(light);
-               
+
                 light.target = scene;
 
             }

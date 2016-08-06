@@ -105,7 +105,7 @@
 
                 //geometry = new THREE.SphereGeometry(.5, 20, 20)
 
-                material = new THREE.MeshPhongMaterial({color:0xffffff,reflectivity: .5, envMap: cubeMap, shading: THREE.FlatShading});
+                material = new THREE.MeshPhongMaterial({color: 0xffffff, reflectivity: .5, envMap: cubeMap, shading: THREE.FlatShading});
 
 
                 // cubes
@@ -178,13 +178,22 @@
             function animate() {
                 TweenMax.delayedCall(3, animate)
 
+                var ease = Back.easeInOut
                 for (var i = 0; i < group.children.length; i++) {
                     var c = group.children[i]
-                    TweenMax.to(c.scale, .3, {delay: .6*i / group.children.length + .6*Math.random(), x: .5, y: .5, z: .5})
-                    TweenMax.to(c.scale, .3, {delay: 1 + .6*i / group.children.length + .6*Math.random(), x: 1, y: 1, z: 1})
 
-                    TweenMax.to(c.rotation, .3, {delay: .6*i / group.children.length + .6*Math.random(), x: Math.random(), y: Math.random(), z: Math.random()})
-                    TweenMax.to(c.rotation, .3, {delay: 1 + .6*i / group.children.length + .6*Math.random(), x: 0, y: 0, z: 0})
+                var random = [Math.random(), Math.random(), Math.random()]
+                    var percentage = 2*i / group.children.length
+
+                    TweenMax.to(c.scale, 1, {delay: percentage, x: .5, y: .5, z: .5, ease: ease})
+                    TweenMax.to(c.scale, 1, {delay: 1 + percentage, x: 1, y: 1, z: 1, ease: ease})
+
+                    TweenMax.to(c.rotation, 1, {delay: percentage, x: Math.random(), y: Math.random(), z: Math.random(), ease: ease})
+                    //TweenMax.to(c.rotation, .3, {delay: 1 + .6 * i / group.children.length + .6 * Math.random(), x: 0, y: 0, z: 0,ease:ease})
+
+                    TweenMax.to(c.position, 1, {delay: percentage, x: c.position.x + (random[0] - .5) * 1, y: c.position.y + (random[1] - .5) * 1, z: c.position.z + (random[2] - .5) * 1, ease: ease})
+                    //TweenMax.to(c.scale, .3, {delay: 1 + .6*i / group.children.length + .6*Math.random(), x: 1, y: 1, z: 1})
+
                 }
             }
 
