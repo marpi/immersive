@@ -38,6 +38,20 @@
             var camera, scene, renderer;
             var mobile = false;
 
+            // instantiate a loader
+            var loader = new THREE.OBJLoader();
+
+            // load a resource
+            loader.load(
+            	// resource URL
+            	'/js/test-flower02.js',
+            	// Function when resource is loaded
+            	function ( object ) {
+            		scene.add( object );
+            	}
+            );
+
+
             init();
             setup();
             render();
