@@ -100,7 +100,7 @@
                 //     v.z *= .1 + .5 * random;
                 // }
 
-                material = new THREE.MeshPhongMaterial({map:texture, side:THREE.DoubleSide});
+                material = new THREE.MeshBasicMaterial({map:texture, side:THREE.DoubleSide});
 
     
                 // central object
@@ -114,12 +114,15 @@
                 // cubes
 
                 group = new THREE.Object3D();
-                    
+                        
+                        
+                var cubeMap=getCubeMap(11)
                     
                 for (var _x = -4; _x <= 4; _x++) {
-                    
-                            var geo = new THREE.CubeGeometry(1, 1, 1)
-                            var mesh = new THREE.Mesh(geo)
+                            var cubeMaterial = new THREE.MeshPhongMaterial({shading:THREE.FlatShading,envMap:cubeMap,color:0xFFFFFF, side:THREE.DoubleSide});
+                            var geo = new THREE.SphereGeometry(.1, 20, 20)//new THREE.CubeGeometry(.1, .1, .1)
+                            var mesh = new THREE.Mesh(geo,cubeMaterial)
+                            mesh.position.x=_x;
                             group.add(mesh);
                         
                 
@@ -127,14 +130,15 @@
 
                 // merge
 
-                var geom = new THREE.Geometry();
+                /*var geom = new THREE.Geometry();
                 for (var i = 0; i < group.children.length; i++) {
                     group.children[i].updateMatrix();
                     geom.merge(group.children[i].geometry, group.children[i].matrix);
                 }
 
-                group = new THREE.Mesh(geom);
-                scene.add(group)
+                group = new THREE.Mesh(geom,group.children[0].material);
+                */
+               scene.add(group)
 
                 // light
 
