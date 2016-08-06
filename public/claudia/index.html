@@ -24,8 +24,6 @@
         <script src="js/third-party/threejs/effects/VREffect.js"></script>
         <script src="js/third-party/threejs/effects/StereoEffect.js"></script>
 
-        		<script src="js/effects/AsciiEffect.js"></script>
-
         <script src="js/third-party/threejs/controls/VRControls.js"></script>
         <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
         <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
@@ -37,19 +35,6 @@
         <script>
             var camera, scene, renderer;
             var mobile = false;
-
-            // instantiate a loader
-            var loader = new THREE.OBJLoader();
-
-            // load a resource
-            loader.load(
-            	// resource URL
-            	'/js/test-flower02.js',
-            	// Function when resource is loaded
-            	function ( object ) {
-            		scene.add( object );
-            	}
-            );
 
 
             init();
@@ -96,6 +81,8 @@
             }
 
             function setup() {
+
+
 
                 // central object
 
