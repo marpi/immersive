@@ -62,12 +62,12 @@
                 // controls.autoRotate = true;
 
                 // events
-                window.addEventListener('deviceorientation', setOrientationControls, true);
+                // window.addEventListener('deviceorientation', setOrientationControls, true);
                 window.addEventListener('resize', onWindowResize, false);
             }
 
             function setup() {
-                var cubeMap = getCubeMap(0)
+                // var cubeMap = getCubeMap(0)
                 // var cubeShader = THREE.ShaderLib['cube'];
                 // cubeShader.uniforms['tCube'].value = cubeMap;
                 // var skyBoxMaterial = new THREE.ShaderMaterial({
@@ -90,7 +90,7 @@
                 //material 
 
                 var smaterial = new THREE.MeshStandardMaterial({
-                    envMap: cubeMap,
+                    // envMap: cubeMap,
                     map: texture,
                     side: THREE.DoubleSide,
                     transparent:true,
