@@ -106,7 +106,7 @@
                 var cubeMap = getCubeMap(11)
 
                 for (var _x = -2; _x <= 2; _x++) {
-                    var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.FlatShading, envMap: cubeMap, color: 0xFFFFFF, side: THREE.DoubleSide});
+                    var cubeMaterial = new THREE.MeshPhongMaterial({envMap: cubeMap, color: 0xFFFFFF, side: THREE.DoubleSide});
                     var geo = new THREE.SphereGeometry(.4, 20, 20)//new THREE.CubeGeometry(.1, .1, .1)
                     var mesh = new THREE.Mesh(geo, cubeMaterial)
                     mesh.position.x = _x;
