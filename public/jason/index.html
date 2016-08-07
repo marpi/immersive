@@ -106,7 +106,7 @@
                 var cubeMap = getCubeMap(11)
 
                 for (var _x = -2; _x <= 2; _x++) {
-                    var cubeMaterial = new THREE.MeshPhongMaterial({shading: THREE.FlatShading, envMap: cubeMap, color: 0xFFFFFF, side: THREE.DoubleSide});
+                    var cubeMaterial = new THREE.MeshPhongMaterial({envMap: cubeMap, color: 0xFFFFFF, shading: THREE.FlatShading, side: THREE.DoubleSide});
                     var geo = new THREE.SphereGeometry(.4, 20, 20)//new THREE.CubeGeometry(.1, .1, .1)
                     var mesh = new THREE.Mesh(geo, cubeMaterial)
                     mesh.position.x = _x;
@@ -131,7 +131,7 @@
                 light.position.set(0, 100, 350);
                 camera.add(light);
 
-                light.target = scene;
+                light.target = camera;
 
             }
 
@@ -144,7 +144,7 @@
                 controls.update();
 
                 if (mobile) {
-                    camera.position.set(0, 0, 0)
+                    camera.position.set(0, 0, 3)
                     camera.translateZ(0);
                 }
 

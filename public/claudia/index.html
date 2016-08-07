@@ -21,6 +21,7 @@
 
         <script src="js/third-party/threejs/three.js"></script>
         <script src="js/third-party/threejs/WebVR.js"></script>
+        <script src="js/third-party/threejs/loaders/OBJLoader.js"></script>
         <script src="js/third-party/threejs/effects/VREffect.js"></script>
         <script src="js/third-party/threejs/effects/StereoEffect.js"></script>
 
@@ -31,13 +32,17 @@
         <script src="js/third-party/TweenMax.min.js"></script>
 
         <script src="js/utils/helpers.js"></script>
+<<<<<<< HEAD
 
         <script src="js/OBJLoader.js"></script>
+=======
+>>>>>>> origin/master
 
         <script>
             var camera, scene, renderer;
             var mobile = false;
 
+<<<<<<< HEAD
             // instantiate a loader
             var loader = new THREE.OBJLoader();
 
@@ -51,6 +56,8 @@
             	}
             );
 
+=======
+>>>>>>> origin/master
 
             init();
             setup();
@@ -99,12 +106,30 @@
 
 
 
-                // central object
+                // instantiate a loader
+                var loader = new THREE.OBJLoader();
 
-                var geometry = new THREE.OctahedronGeometry( .5, 1 );
-          			var material = new THREE.MeshNormalMaterial( { color: 0x880088 } );
-          			var prism = new THREE.Mesh( geometry, material );
-          			scene.add( prism );
+                // load a resource
+                loader.load(
+                        'obj_test.obj',
+                        function (object) {
+                            object.scale.set(.1, .1, .1)
+                            console.log(object)
+                            for (var i = 0; i < object.children.length; i++) {
+                                //console.log(i,object.children[i])
+                                object.children[i].material.color = new THREE.Color(0xFFFFFF * Math.random())
+                                object.children[i].material.ambient = new THREE.Color(0xFFFFFF)
+                            }
+                            scene.add(object);
+                        }
+                );
+
+                // central object
+                var material = new THREE.MeshNormalMaterial({color: 0x880088});
+
+                /*var geometry = new THREE.OctahedronGeometry(.5, 1);
+                 var prism = new THREE.Mesh(geometry, material);
+                 scene.add(prism);*/
 
                 // cubes
 
@@ -133,7 +158,7 @@
                 // light
 
                 var light = new THREE.DirectionalLight(0xffffff);
-                light.position.set(-1, 1.5, 0.5);
+                light.position.set(-1, .5, 0.5);
                 scene.add(light);
             }
 

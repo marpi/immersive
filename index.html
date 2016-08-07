@@ -31,10 +31,12 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer, material, geometry, sgeometry, originalgGeometry;
+            var camera, scene, renderer, geo, material, geometry, sgeometry, originalgGeometry;
             var mobile = false;
             var texture
-            var group;
+            var group, group2;
+            var flying = false;
+            var butterfly, butterflies = []
 
             init();
             setup();
@@ -56,14 +58,14 @@
                 // camera
 
                 camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
-                camera.position.set(0, 0, 1.5);
+                camera.position.set(0, 0, 2);
                 camera.focalLength = camera.position.distanceTo(scene.position);
                 scene.add(camera)
 
                 // controls
 
                 controls = new THREE.OrbitControls(camera);
-                controls.autoRotate = true;
+                //controls.autoRotate = true;
 
                 if (WEBVR.isAvailable() === true) {
                     controls = new THREE.VRControls(camera);
@@ -77,11 +79,13 @@
 
                 window.addEventListener('deviceorientation', setOrientationControls, true);
                 window.addEventListener('resize', onWindowResize, false);
+                window.addEventListener('mousemove', addCube, false);
+                window.addEventListener('click', flyAway, false);
 
             }
 
             function setup() {
-                var cubeMap = getCubeMap(8)
+                var cubeMap = getCubeMap(1)
 
                 var cubeShader = THREE.ShaderLib['cube'];
                 cubeShader.uniforms['tCube'].value = cubeMap;
@@ -105,65 +109,18 @@
 
                 //geometry = new THREE.SphereGeometry(.5, 20, 20)
 
-                material = new THREE.MeshPhongMaterial({color: 0xffffff, reflectivity: .5, envMap: cubeMap, shading: THREE.FlatShading});
+                material = new THREE.MeshPhongMaterial({
+                    color: 0xffffff,
+                    reflectivity: .5,
+                    envMap: cubeMap,
+                    shading: THREE.FlatShading,
+                    side: THREE.DoubleSide});
 
 
                 // cubes
-                var geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
+                geo = new THREE.BoxGeometry(.1, .1, .1, 1, 1, 1)
 
-                group = new THREE.Object3D();
-                for (var _x = -5; _x <= 5; _x++) {
-                    for (var _y = -5; _y <= 5; _y++) {
-                        for (var _z = -5; _z <= 5; _z++) {
-                            var mesh = new THREE.Mesh(geo, material)
-
-                            mesh.position.set(_x * .1, _y * .1, _z * .1)
-                            //mesh.rotation.set(Math.random(), Math.random(), Math.random())
-                            //mesh.scale.set(Math.random() * 5, Math.random() * 5, Math.random() * 5)
-
-                            group.add(mesh);
-                        }
-                    }
-                }
-
-                /*var _x = 0
-                 var _y = 0
-                 var _z = 0
-                 
-                 var maxLines = 30
-                 var maxElementsInLine = 70
-                 
-                 for (var j = 0; j <= maxLines; j++) {
-                 var last = group
-                 for (var i = 0; i <= maxElementsInLine; i++) {
-                 var mesh = new THREE.Mesh(geo, material)
-                 
-                 _y = .15;
-                 
-                 mesh.rotation.set(.2, .2, .2)
-                 if (i != 0) {
-                 mesh.position.set(_x, _y, _z)
-                 } else {
-                 mesh.rotation.set(j,j,j)
-                 }
-                 mesh.scale.set(1 - i / maxElementsInLine+.1, 1 - i / maxElementsInLine+.1, 1 - i / maxElementsInLine+.1)
-                 
-                 last.add(mesh);
-                 last = mesh;
-                 }
-                 }*/
-                scene.add(group)
-                // merge
-
-                /*var geom = new THREE.Geometry()
-                 for (var i = 0; i < group.children.length; i++) {
-                 group.children[i].updateMatrix();
-                 geom.merge(group.children[i].geometry, group.children[i].matrix);
-                 }
-                 group = new THREE.Mesh(geom, material);
-                 scene.add(group)*/
-
-                // light
+                prepareButterfly()
 
                 var light = new THREE.AmbientLight(0x999999);
                 scene.add(light);
@@ -171,42 +128,81 @@
                 var pointlight = new THREE.DirectionalLight(0xFFffff, 1, 10)
                 //pointlight.position.x = 10
                 camera.add(pointlight)
-
-                animate()
             }
 
-            function animate() {
-                TweenMax.delayedCall(3, animate)
+            function prepareButterfly() {
+                butterfly = new THREE.Object3D();
+                leftwing = new THREE.Object3D();
+                rightwing = new THREE.Object3D();
 
-                var ease = Back.easeInOut
-                for (var i = 0; i < group.children.length; i++) {
-                    var c = group.children[i]
+                butterfly.add(leftwing)
+                rightwing.scale.x = -1
+                butterfly.add(rightwing)
+                scene.add(butterfly)
+            }
 
-                var random = [Math.random(), Math.random(), Math.random()]
-                    var percentage = 2*i / group.children.length
+            function addCube(e) {
+                if (Math.random() > .3)
+                    return;
+                var mesh = new THREE.Mesh(geo, material)
 
-                    TweenMax.to(c.scale, 1, {delay: percentage, x: .5, y: .5, z: .5, ease: ease})
-                    TweenMax.to(c.scale, 1, {delay: 1 + percentage, x: 1, y: 1, z: 1, ease: ease})
+                console.log(e.clientX, window.innerWidth, e.clientX - window.innerWidth / 2)
 
-                    TweenMax.to(c.rotation, 1, {delay: percentage, x: Math.random(), y: Math.random(), z: Math.random(), ease: ease})
-                    //TweenMax.to(c.rotation, .3, {delay: 1 + .6 * i / group.children.length + .6 * Math.random(), x: 0, y: 0, z: 0,ease:ease})
-
-                    TweenMax.to(c.position, 1, {delay: percentage, x: c.position.x + (random[0] - .5) * 1, y: c.position.y + (random[1] - .5) * 1, z: c.position.z + (random[2] - .5) * 1, ease: ease})
-                    //TweenMax.to(c.scale, .3, {delay: 1 + .6*i / group.children.length + .6*Math.random(), x: 1, y: 1, z: 1})
-
+                var pos = {
+                    x: e.clientX - window.innerWidth / 2,
+                    y: -e.clientY + window.innerHeight / 2
                 }
+                mesh.position.set(pos.x / 100, pos.y / 100, 0)
+                mesh.rotation.set(Math.random(), Math.random(), Math.random())
+                mesh.scale.set(Math.random() * 4 + 1, Math.random() * 4 + 1, Math.random() * 4 + 1)
+
+                leftwing.add(mesh);
+                var clone = mesh.clone();
+                rightwing.add(clone);
+            }
+
+            function flyAway() {
+                flying = true;
+
+                var animationTime = 30;
+
+                TweenMax.to(butterfly.position, animationTime, {
+                    x: (Math.random() - .5) * 10,
+                    y: (Math.random() - .5) * 10,
+                    z: (Math.random() - .5) * 10,
+                    onComplete: remove,
+                    onCompleteParams: [butterfly]
+                })
+                TweenMax.to(butterfly.rotation, animationTime, {
+                    x: (Math.random() - .5) * 3,
+                    y: (Math.random() - .5) * 3,
+                    z: (Math.random() - .5) * 3,
+                })
+
+                butterflies.push(butterfly)
+
+                prepareButterfly()
             }
 
             function remove(object) {
                 scene.remove(object)
             }
 
-            var num = 0
-            var time = 0;
+            var time = 0
             function render() {
                 requestAnimationFrame(render);
 
-                time += 1
+                if (flying) {
+                    time += .01
+
+                    //group.position.y += .01
+                    //group2.position.y += .01
+                    for (var i = 0; i < butterflies.length; i++) {
+                        var butterfly = butterflies[i]
+                        butterfly.children[0].rotation.y = Math.sin(2 * time) / 3
+                        butterfly.children[1].rotation.y = -butterfly.children[0].rotation.y
+                    }
+                }
 
                 controls.update();
 
