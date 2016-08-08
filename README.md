@@ -2,6 +2,14 @@
 
 [![alt text](http://immersive.marpi.pl/assets/image.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
 
+[![alt text](http://immersive.marpi.pl/assets/image2.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/donut)
+
+[![alt text](http://immersive.marpi.pl/assets/image3.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/cube_wall)
+
+[![alt text](http://immersive.marpi.pl/assets/image4.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/everyone)
+
+[![alt text](http://immersive.marpi.pl/assets/image5.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/lights)
+
 ### How to run
 
 In order to run the project you need a local server. You can use Browsersync:
@@ -31,3 +39,5 @@ python -m http.server
 And once you commit your changes, and want to see them in Google Cardboard:
 
 [https://immersive.marpi.pl/](https://immersive.marpi.pl/)
+
+
