@@ -1,6 +1,6 @@
 # Immersive Three.js Workshop
 
-[![alt text](http://immersive.marpi.pl/assets/image.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
+[![alt text](http://immersive.marpi.pl/assets/image1.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
 
 [![alt text](http://immersive.marpi.pl/assets/image2.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/donut)
 
