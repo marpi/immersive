@@ -63,6 +63,7 @@
 
                 controls = new THREE.OrbitControls(camera);
                 controls.autoRotate = true;
+                controls.maxDistance=10
 
                 if (WEBVR.isAvailable() === true) {
                     controls = new THREE.VRControls(camera);
