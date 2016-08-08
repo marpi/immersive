@@ -12,6 +12,8 @@
 
 [![alt text](http://immersive.marpi.pl/assets/image5.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/lights)
 
+full list: [http://immersive.marpi.pl/public/](http://immersive.marpi.pl/public/)
+
 ### How to run
 
 In order to run the project you need a local server. You can use Browsersync:
