@@ -1,4 +1,6 @@
-# Immersive Three.js Workshop
+# Immersive Three.js Workshop at Gray Area
+
+[http://grayarea.org/education/immersive/](http://grayarea.org/education/immersive/)
 
 [![alt text](http://immersive.marpi.pl/assets/image1.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
 
