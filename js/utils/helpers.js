@@ -58,6 +58,7 @@ function getCubeMap(i) {
         {file: "stormydays_large.jpg", size: 1024},
         {file: "violentdays_large.jpg", size: 1024},
         {file: "darkness.jpg", size: 1024},
+        {file: "horizontalSkyBox.png", size: 1024},
     ];
 
     var loader = new THREE.ImageLoader();

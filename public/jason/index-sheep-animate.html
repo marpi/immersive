@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>JASON VARONE - animal sprites</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                background-color: #fff;
+                margin: 0px;
+                overflow: hidden;
+                font-family:Monospace;
+                font-size:13px;
+                text-align:center;
+                font-weight: bold;
+                text-align:center;
+            }
+
+            a {
+                color:#0078ff;
+            }
+
+            #info {
+                color:#fff;
+                position: absolute;
+                top: 0px; width: 100%;
+                padding: 5px;
+                z-index:100;
+            }
+
+        </style>
+    </head>
+    <body>
+
+        <script src="js/third-party/threejs/three.js"></script>
+        <script src="js/third-party/threejs/WebVR.js"></script>
+        <script src="js/third-party/threejs/effects/VREffect.js"></script>
+        <script src="js/third-party/threejs/effects/StereoEffect.js"></script>
+
+        <script src="js/third-party/threejs/controls/VRControls.js"></script>
+        <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
+        <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
+
+        <script src="js/third-party/TweenMax.min.js"></script>
+
+        <script src="js/utils/helpers.js"></script>
+
+        <script>
+
+
+
+            var container, stats;
+            var texture, allGroups = [];
+            var camera, scene, renderer, particles, geometry, materials = [], parameters, i, h, color, sprite, size;
+            var mouseX = 0, mouseY = 0;
+
+            // var windowHalfX = window.innerWidth / 2;
+            // var windowHalfY = window.innerHeight / 2;
+
+            init();
+            setup();
+            animate();
+
+            function init() {
+
+                container = document.createElement('div');
+                document.body.appendChild(container);
+
+                // scene
+
+                scene = new THREE.Scene();
+                // scene.fog = new THREE.FogExp2( 0x000000, 0.0000 ); // not using but save for later
+
+                // camera
+
+                camera = new THREE.PerspectiveCamera(1015, window.innerWidth / window.innerHeight, 1, 2000);
+                camera.position.x = 10;
+
+
+                controls = new THREE.OrbitControls(camera);
+
+                geometry = new THREE.Geometry();
+            }
+
+            function setup() {
+
+                // My animated animals
+
+                /*texture = new THREE.TextureLoader().load("assets/sheep/sheep-gif1-white.png");
+                 texture.wrapS = THREE.RepeatWrapping;
+                 texture.wrapT = THREE.RepeatWrapping;
+                 texture.repeat.set(1, 1 / 4);*/
+
+                texture = new THREE.TextureLoader().load("assets/sheep/sheep-gif1-500px.png");
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(1 / 11, 1); //zoom in eleven times
+
+                texture2 = new THREE.TextureLoader().load("assets/sheep/sheep-gif2-500px.png");
+                texture2.wrapS = THREE.RepeatWrapping;
+                texture2.wrapT = THREE.RepeatWrapping;
+                texture2.repeat.set(1 / 4, 1);
+
+
+                for (i = 0; i < 10000; i++) {
+
+                    var vertex = new THREE.Triangle(); // Why can't I change the rotation?
+                    vertex.x = (Math.random() - .5) * 2000;
+                    vertex.y = (Math.random() - .5) * 2000;
+                    vertex.z = (Math.random() - .5) * 2000;
+
+                    geometry.vertices.push(vertex);
+
+                }
+
+                parameters = [
+                    [[1.0, 0.2, 500], texture, 55],
+                    [[5, 5, 1], texture2, 25],
+                            // [ [0.90, 0.05, 1], sprite1, 10 ],
+                            // [ [0.85, 0, 1], sprite5, 8 ],
+                            // [ [0.80, 0, 1], sprite4, 5 ]
+                ];
+
+                for (i = 0; i < parameters.length; i++) {
+
+                    color = 0;
+                    sprite = parameters[i][1];
+                    size = parameters[i][2];
+
+                    materials[i] = new THREE.PointsMaterial({size: size, map: sprite, depthTest: false, transparent: true});
+
+                    particles = new THREE.Points(geometry, materials[i]);
+
+                    particles.rotation.y = i
+                    // particles.rotation.y=-Math.PI
+
+                    // particles.rotation.x = Math.random() * 6;
+                    // particles.rotation.y = Math.random() * 6;
+                    // particles.rotation.z = Math.random() * 6;
+
+                    scene.add(particles);
+                    allGroups.push(particles)
+
+                }
+
+                renderer = new THREE.WebGLRenderer();
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                container.appendChild(renderer.domElement);
+
+                // stats = new Stats();
+                // container.appendChild( stats.dom );
+
+                //
+                window.addEventListener('resize', onWindowResize, false);
+
+                setInterval(updateSpriteSheets, 1000 / 10) //frames pers second
+
+                animateGroup()
+            }
+
+            function animateGroup() {
+                TweenMax.delayedCall(3, animateGroup)
+
+                var ease = Back.easeInOut;
+
+                for (var i = 0; i < allGroups.length; i++) {
+                    TweenMax.to(allGroups[i].position, 3, {
+                        delay:i/2,
+                        x: (Math.random() - .5) * 1000,
+                        y: (Math.random() - .5) * 1000,
+                        z: (Math.random() - .5) * 1000,
+                        ease: ease
+                    });
+                }
+            }
+
+            function updateSpriteSheets() {
+                texture.offset.x += 1 / 11 //move right one eleventh of the texture
+                texture2.offset.x += 1 / 4 //move right one forth of the texture
+            }
+
+            function onWindowResize() {
+
+                windowHalfX = window.innerWidth / 2;
+                windowHalfY = window.innerHeight / 2;
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            function animate() {
+
+                requestAnimationFrame(animate);
+                render();
+
+            }
+
+
+            function render() {
+
+
+                // var time = Date.now() * 0.00005;
+
+                /*for (var i=0;i<allGroups.length;i++){
+                 allGroups[i].position.x+=i-.5
+                 }*/
+
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+
+            }
+
+
+        </script>
+    </body>
+</html>

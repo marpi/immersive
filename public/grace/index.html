@@ -134,18 +134,19 @@
             var time = 0;
             function render() {
                 requestAnimationFrame(render);
-                // time += 1
-                // texture.offset.y = time / 10000;
-                // for (var i = 0; i < sgeometry.vertices.length; i++) {
-                //     var v = sgeometry.vertices[i]
-                //     var ov = originalgGeometry.vertices[i];
-                //     var sin = (Math.sin(time / 100 + i / 10) + 1) / 2
-                //     var random = Math.random()
-                //     v.x = ov.x + guiControl.shimmer * random;
-                //     v.y = ov.y + guiControl.shimmer * random;
-                //     v.z = ov.z + guiControl.shimmer * random;
-                // }
-                // sgeometry.verticesNeedUpdate = true;
+
+                time += 1
+                texture.offset.y = time / 10000;
+                for (var i = 0; i < sgeometry.vertices.length; i++) {
+                    var v = sgeometry.vertices[i]
+                    var ov = originalgGeometry.vertices[i];
+                    var sin = (Math.sin(time / 100 + i / 10) + 1) / 2
+                    var random = Math.random()
+                    v.x = ov.x + guiControl.shimmer * random;
+                    v.y = ov.y + guiControl.shimmer * random;
+                    v.z = ov.z + guiControl.shimmer * random;
+                }
+                sgeometry.verticesNeedUpdate = true;
 
                 controls.update();
                 if (mobile) {

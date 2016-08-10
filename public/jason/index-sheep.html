@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Immersive Workshop</title>
+        <meta charset="utf-8">
+        <meta property="og:title" content="Immersive Workshop"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" content="https://immersive.marpi.pl/assets/image.jpg"/>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style>
+            body {
+                margin: 0px;
+                overflow: hidden;
+                background-color: #000000;
+            }
+        </style>
+    </head>
+    <body>
+
+        <script src="js/third-party/threejs/three.js"></script>
+        <script src="js/third-party/threejs/WebVR.js"></script>
+        <script src="js/third-party/threejs/effects/VREffect.js"></script>
+        <script src="js/third-party/threejs/effects/StereoEffect.js"></script>
+
+        <script src="js/third-party/threejs/controls/VRControls.js"></script>
+        <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
+        <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
+
+        <script src="js/third-party/TweenMax.min.js"></script>
+
+        <script src="js/utils/helpers.js"></script>
+
+        <script>
+            var camera, scene, renderer, material, geometry, sgeometry, originalgGeometry;
+            var mobile = false;
+            var texture
+            init();
+            setup();
+            render();
+            function init() {
+
+                // renderer
+
+                renderer = new THREE.WebGLRenderer({antialias: true});
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                document.body.appendChild(renderer.domElement);
+
+                // scene
+
+                scene = new THREE.Scene();
+
+                // camera
+
+                camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(0, 0, 15);
+                camera.focalLength = camera.position.distanceTo(scene.position);
+                scene.add(camera)
+
+                // controls
+                // controls = new THREE.OrbitControls(camera);
+                // controls.autoRotate = true;
+
+                // events
+                // window.addEventListener('deviceorientation', setOrientationControls, true);
+                window.addEventListener('resize', onWindowResize, false);
+            }
+
+            function setup() {
+                // var cubeMap = getCubeMap(0)
+                // var cubeShader = THREE.ShaderLib['cube'];
+                // cubeShader.uniforms['tCube'].value = cubeMap;
+                // var skyBoxMaterial = new THREE.ShaderMaterial({
+                //     fragmentShader: cubeShader.fragmentShader,
+                //     vertexShader: cubeShader.vertexShader,
+                //     uniforms: cubeShader.uniforms,
+                //     depthWrite: false,
+                //     side: THREE.BackSide
+                // });
+
+                // var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
+                // scene.add(skyBox);
+                texture = new THREE.TextureLoader().load("assets/sheep-gif1-white.png");
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                texture.repeat.set(1,1/4);
+
+                //geometry
+
+                //material 
+
+                var smaterial = new THREE.MeshStandardMaterial({
+                    // envMap: cubeMap,
+                    map: texture,
+                    side: THREE.DoubleSide,
+                    transparent:true,
+                
+                });
+
+                // central object
+                
+                sgeometry = new THREE.PlaneGeometry(10,10);
+                var object = new THREE.Mesh(sgeometry, smaterial);
+                scene.add(object);
+
+                // cubes
+                 
+                // merge
+ 
+                // light
+
+                var light = new THREE.AmbientLight(0xFFFFFF);
+                scene.add(light);
+                
+            }
+     
+            var num = 0
+            var time = 0;
+            function render() {
+                requestAnimationFrame(render);
+                time += 1
+                num++
+                if(num>10){
+                    num=0
+                    texture.offset.y += .25//time / 10000;
+                }
+                /*for (var i = 0; i < sgeometry.vertices.length; i++) {
+                    var v = sgeometry.vertices[i]
+                    var ov = originalgGeometry.vertices[i];
+                    var sin = (Math.sin(time / 100 + i / 10) + 1) / 2
+                    var random = Math.random()
+                    v.x = ov.x + .2 * sin;
+                    v.y = ov.y + .2 * sin;
+                    v.z = ov.z + .2 * sin;
+                }
+                sgeometry.verticesNeedUpdate = true;*/
+                
+                // controls.update();
+                // if (mobile) {
+                //     camera.position.set(0, 0, 0)
+                //     camera.translateZ(10);
+                // }
+                renderer.render(scene, camera);
+            }
+        </script>
+    </body>
+</html>
