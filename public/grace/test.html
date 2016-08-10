@@ -51,6 +51,12 @@
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
+            // position camera
+            var mouseX = 0, mouseY = 0;
+            camera.position.x = 10;
+            camera.position.y = 5;
+            camera.lookAt( scene.position );
+
             // setup render to screen
             var renderer = new THREE.WebGLRenderer();
             renderer.setClearColor(0xdddddd);
@@ -65,10 +71,7 @@
             light.position.set(1, 1.5, 0.5);
             scene.add(light);
 
-
-            // position camera
-            camera.position.z = 5;
-
+        
             // controls
             var controls = new THREE.OrbitControls(camera);
             // controls.autoRotate = true;
@@ -107,7 +110,9 @@
             function render(){
                 requestAnimationFrame(render);
                 // controls.update();
-
+                camera.position.x += (mouseX - camera.position.x) * 0.05*10;
+                camera.position.y += (-mouseY - camera.position.y) * 0.05*10;
+                console.log(camera.position.x)
                 cube.rotation.x += guiControl.rotationX;
                 cube.rotation.y += guiControl.rotationY;
                 cube.rotation.z += guiControl.rotationZ;
