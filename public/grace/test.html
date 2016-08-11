@@ -25,22 +25,22 @@
         <script src="js/third-party/threejs/controls/VRControls.js"></script>
         <script src="js/third-party/threejs/controls/DeviceOrientationControls.js"></script>
         <script src="js/third-party/threejs/controls/OrbitControls.js"></script>
-        
+
         <script src="js/third-party/TweenMax.min.js"></script>
         <script src="js/third-party/dat.gui.min.js"></script>
-        
+
         <script src="js/utils/helpers.js"></script>
 
         <script>
             var gui = new dat.GUI();
-            var guiControl = new function(){
+            var guiControl = new function () {
                 this.rotationX = 0.01;
                 this.rotationY = 0.01;
                 this.rotationZ = 0.01;
                 this.p = 1;
                 this.q = 1;
             }
-            
+
             gui.add(guiControl, 'rotationX', 0, 1);
             gui.add(guiControl, 'rotationY', 0, 1);
             gui.add(guiControl, 'rotationZ', 0, 1);
@@ -55,12 +55,12 @@
             var mouseX = 0, mouseY = 0;
             camera.position.x = 10;
             camera.position.y = 5;
-            camera.lookAt( scene.position );
+            camera.lookAt(scene.position);
 
             // setup render to screen
             var renderer = new THREE.WebGLRenderer();
             renderer.setClearColor(0xdddddd);
-            renderer.setSize( window.innerWidth, window.innerHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
             renderer.shadowMapSoft = true;
             document.body.appendChild(renderer.domElement);
@@ -71,7 +71,7 @@
             light.position.set(1, 1.5, 0.5);
             scene.add(light);
 
-        
+
             // controls
             var controls = new THREE.OrbitControls(camera);
             // controls.autoRotate = true;
@@ -81,18 +81,18 @@
             var axis = new THREE.AxisHelper(10);
             scene.add(axis);
 
-            var grid = new THREE.GridHelper(50,5);
+            var grid = new THREE.GridHelper(50, 5);
             var color = new THREE.Color("rgb(255,0,0)");
             // grid.setColors(color, 0x000000);
             // scene.add(grid);
 
             // setup cube and add to scene
-            var geometry = new THREE.BoxGeometry(1,1,1);
+            var geometry = new THREE.BoxGeometry(1, 1, 1);
             var material = new THREE.MeshLambertMaterial({color: 0xff00ff});
             var cube = new THREE.Mesh(geometry, material);
             cube.castShadow = true;
             scene.add(cube);
-            
+
             p = guiControl.p;
             q = guiControl.q;
 
@@ -100,28 +100,37 @@
             var torusGeometry = new THREE.TorusKnotGeometry(0.64, 0.25, 25, 6, 15, 15);
             var torusMaterial = new THREE.MeshLambertMaterial({color: 0xff00ff});
             var torus = new THREE.Mesh(torusGeometry, torusMaterial);
-            torus.position.set(1,1,1);
+            torus.position.set(1, 1, 1);
             torus.castShadow = true;
             scene.add(torus);
 
+            window.addEventListener('mousemove', mousemove, false);
 
+            function mousemove(e) {
+                mouseX = e.clientX - window.innerWidth / 2
+                mouseY = e.clientY - window.innerHeight / 2
+            }
 
             // run 60 times per second
-            function render(){
+            function render() {
                 requestAnimationFrame(render);
                 // controls.update();
-                camera.position.x += (mouseX - camera.position.x) * 0.05*10;
-                camera.position.y += (-mouseY - camera.position.y) * 0.05*10;
+                camera.position.x = (mouseX - camera.position.x) * 0.02;
+                camera.position.y = (-mouseY - camera.position.y) * 0.02;
+                camera.position.z=3;
+                
+                camera.lookAt(scene.position)
+                
                 console.log(camera.position.x)
                 cube.rotation.x += guiControl.rotationX;
                 cube.rotation.y += guiControl.rotationY;
                 cube.rotation.z += guiControl.rotationZ;
-                
+
                 torusGeometry.parameters.p += guiControl.p;
                 torusGeometry.parameters.q += guiControl.q;
                 torusGeometry.verticesNeedUpdate = true;
 
-                renderer.render(scene,camera);
+                renderer.render(scene, camera);
             };
 
             render();
