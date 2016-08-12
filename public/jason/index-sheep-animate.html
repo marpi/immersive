@@ -145,13 +145,13 @@
 
                 setInterval(updateSpriteSheets, 1000 / 5) //frames per second
 
-                // animateGroup()
-                // animateCam()
+                animateGroup()
+               
 
             }
 
             function animateGroup() {
-                TweenMax.delayedCall(10, animateGroup)
+                TweenMax.delayedCall(3, animateGroup)
                 var ease = Back.easeInOut;
                 for (var i = 0; i < allGroups.length; i++) {
                     TweenMax.to(allGroups[i].position, 3, {
@@ -189,39 +189,6 @@
 
             }
 
-
-            function animateCam(dir,pos) {
-
-                    if(dir == 'x'){
-
-                TweenMax.delayedCall(10, animateGroup)
-                var ease = Back.easeInOut;
-                TweenMax.to(camera.position, 3, {x: pos, repeat:-1, yoyo:true});
-
-                    }else if(dir == 'y'){
-
-                TweenMax.delayedCall(10, animateGroup)
-                var ease = Back.easeInOut;
-                TweenMax.to(camera.position, 3, {y: pos});
-
-                    }else if(dir == 'z'){
-                TweenMax.delayedCall(10, animateGroup)
-                var ease = Back.easeInOut;
-                TweenMax.to(camera.position, 3, {z: pos});
- 
-                    }
-
-
-
-
-            }
-            function cameraMove(dir,pos)
-                {
-
-                }
-
-
-
             function render() {
 
                 // var time = Date.now() * 0.00005;
@@ -233,9 +200,6 @@
                 camera.lookAt(scene.position);
 
                 renderer.render(scene, camera);
-
-
-
 
             }
 
