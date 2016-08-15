@@ -102,12 +102,12 @@
 
                 // merge
 
-                var geom = new THREE.Geometry()
-                for (var i = 0; i < group.children.length; i++) {
-                    group.children[i].updateMatrix();
-                    geom.merge(group.children[i].geometry, group.children[i].matrix);
-                }
-                group = new THREE.Mesh(geom, material);
+                // var geom = new THREE.Geometry()
+                // for (var i = 0; i < group.children.length; i++) {
+                //     group.children[i].updateMatrix();
+                //     geom.merge(group.children[i].geometry, group.children[i].matrix);
+                // }
+                // group = new THREE.Mesh(geom, material);
                 scene.add(group)
 
                 // light

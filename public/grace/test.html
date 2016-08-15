@@ -32,108 +32,69 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var gui = new dat.GUI();
-            var guiControl = new function () {
-                this.rotationX = 0.01;
-                this.rotationY = 0.01;
-                this.rotationZ = 0.01;
-                this.p = 1;
-                this.q = 1;
+
+            
+            var camera, scene, renderer;
+            var geometry, material, mesh;
+
+            function setup() {
+
+                var W = window.innerWidth, H = window.innerHeight;
+                renderer = new THREE.WebGLRenderer( { preserveDrawingBuffer: true } );
+                renderer.autoClearColor = false;
+                renderer.setSize( W, H );
+                document.body.appendChild( renderer.domElement );
+
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                // position camera
+                camera.position.x = 10;
+                camera.position.y = 5;
+                camera.position.z = 3;
+                camera.lookAt(scene.position);                
+                
+                var controls = new THREE.OrbitControls(camera);
+                controls.autoRotate = true;                 
+                // paste your code from the geometryGUI here
+                geometry = new THREE.TetrahedronGeometry(80.8, 1);
+                material = new THREE.MeshBasicMaterial({shading: THREE.FlatShading, color: 0xd23b3b, wireframe: true, wireframeLinewidth: 1, transparent: true, opacity: 0.49});
+                mesh = new THREE.Mesh(geometry, material);
+                mesh.scale.x = mesh.scale.y = mesh.scale.z = 1.21;
+                mesh.position.y = 86.02;
+                mesh.rotation.z = 2.91;
+                scene.add(mesh);
+
+                window.addEventListener('mousemove', mousemove, false);
+                
             }
-
-            gui.add(guiControl, 'rotationX', 0, 1);
-            gui.add(guiControl, 'rotationY', 0, 1);
-            gui.add(guiControl, 'rotationZ', 0, 1);
-            gui.add(guiControl, 'p', 0, 20);
-            gui.add(guiControl, 'q', 0, 20);
-
-            // setup scene and camera
-            var scene = new THREE.Scene();
-            var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
-            // position camera
+            
             var mouseX = 0, mouseY = 0;
-            camera.position.x = 10;
-            camera.position.y = 5;
-            camera.lookAt(scene.position);
-
-            // setup render to screen
-            var renderer = new THREE.WebGLRenderer();
-            renderer.setClearColor(0xdddddd);
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMapSoft = true;
-            document.body.appendChild(renderer.domElement);
-
-            // light
-
-            var light = new THREE.DirectionalLight(0xffffff);
-            light.position.set(1, 1.5, 0.5);
-            scene.add(light);
-
-
-            // controls
-            var controls = new THREE.OrbitControls(camera);
-            // controls.autoRotate = true;
-
-
-            // Helpers
-            var axis = new THREE.AxisHelper(10);
-            scene.add(axis);
-
-            var grid = new THREE.GridHelper(50, 5);
-            var color = new THREE.Color("rgb(255,0,0)");
-            // grid.setColors(color, 0x000000);
-            // scene.add(grid);
-
-            // setup cube and add to scene
-            var geometry = new THREE.BoxGeometry(1, 1, 1);
-            var material = new THREE.MeshLambertMaterial({color: 0xff00ff});
-            var cube = new THREE.Mesh(geometry, material);
-            cube.castShadow = true;
-            scene.add(cube);
-
-            p = guiControl.p;
-            q = guiControl.q;
-
-            // setup torus and add to scene
-            var torusGeometry = new THREE.TorusKnotGeometry(0.64, 0.25, 25, 6, 15, 15);
-            var torusMaterial = new THREE.MeshLambertMaterial({color: 0xff00ff});
-            var torus = new THREE.Mesh(torusGeometry, torusMaterial);
-            torus.position.set(1, 1, 1);
-            torus.castShadow = true;
-            scene.add(torus);
-
-            window.addEventListener('mousemove', mousemove, false);
-
+                
             function mousemove(e) {
                 mouseX = e.clientX - window.innerWidth / 2
                 mouseY = e.clientY - window.innerHeight / 2
             }
+            
+            function draw() {
 
-            // run 60 times per second
-            function render() {
-                requestAnimationFrame(render);
-                // controls.update();
+                requestAnimationFrame( draw );
                 camera.position.x = (mouseX - camera.position.x) * 0.02;
                 camera.position.y = (-mouseY - camera.position.y) * 0.02;
-                camera.position.z=3;
+                camera.position.z = 3;
                 
-                camera.lookAt(scene.position)
-                
-                console.log(camera.position.x)
-                cube.rotation.x += guiControl.rotationX;
-                cube.rotation.y += guiControl.rotationY;
-                cube.rotation.z += guiControl.rotationZ;
+                camera.lookAt(scene.position)               
+                // experiment with code from the snippets menu here
+                var time = Date.now() * 0.0005;
+                h = ( 360 * ( 1.0 + time ) % 360 ) / 360;
+                mesh.material.color.setHSL(h, 0.5, 0.5 );
+mesh.position.x = Math.sin( Date.now() * 0.001 ) * 50;  
+                mesh.rotation.z = Date.now() * 0.0005;              
+                renderer.render( scene, camera );
 
-                torusGeometry.parameters.p += guiControl.p;
-                torusGeometry.parameters.q += guiControl.q;
-                torusGeometry.verticesNeedUpdate = true;
+            }
 
-                renderer.render(scene, camera);
-            };
-
-            render();
+            setup();
+            draw();
 
         </script>
     </body>
