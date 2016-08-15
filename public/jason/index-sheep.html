@@ -80,10 +80,10 @@
 
                 // var skyBox = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skyBoxMaterial);
                 // scene.add(skyBox);
-                texture = new THREE.TextureLoader().load("assets/sheep-gif1-white.png");
+                texture = new THREE.TextureLoader().load("assets/sheep/sheep-gif1-500px.png");
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
-                texture.repeat.set(1,1/4);
+                texture.repeat.set(1/11,1);
 
                 //geometry
 
@@ -122,7 +122,7 @@
                 num++
                 if(num>10){
                     num=0
-                    texture.offset.y += .25//time / 10000;
+                    texture.offset.x += 1 / 11//time / 10000;
                 }
                 /*for (var i = 0; i < sgeometry.vertices.length; i++) {
                     var v = sgeometry.vertices[i]
