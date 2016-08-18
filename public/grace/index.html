@@ -37,7 +37,7 @@
         <script src="js/utils/helpers.js"></script>
 
         <script>
-            var camera, scene, renderer, material, geometry, sgeometry, originalgGeometry;
+            var camera, scene, renderer, material, geometry, sgeometry, originalgGeometry, particle;
             var gui, guiControl, object
             var mobile = false;
             var texture
@@ -53,16 +53,18 @@
                 // scene
                 scene = new THREE.Scene();
                 // camera
-                camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
-                camera.position.set(0, 0, 3);
+                camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 1, 1000);
+                camera.position.set(0, 0, 10);
                 camera.focalLength = camera.position.distanceTo(scene.position);
                 scene.add(camera)
                 // controls
                 gui = new dat.GUI();
                 guiControl = new function () {
-                    this.shimmer = 0.1;
+                    this.shimmer = 0;
                     this.p = 5;
                     this.q = 5;
+                    this.opacity = 1;
+                    this.wfSolid = 0.1;
                 }
 
                 gui.add(guiControl, 'shimmer', 0, 0.5);
@@ -70,6 +72,12 @@
                     changeGeometry();
                 });
                 gui.add(guiControl, 'q', 0, 20).onChange(function () {
+                    changeGeometry();
+                });
+                gui.add(guiControl, 'opacity', 0, 1).onChange(function () {
+                    changeGeometry();
+                });
+                gui.add(guiControl, 'wfSolid', 0, 1).onChange(function () {
                     changeGeometry();
                 });
 
@@ -90,7 +98,10 @@
                 sgeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, Math.round(guiControl.p), Math.round(guiControl.q));
                 originalgGeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, Math.round(guiControl.p), Math.round(guiControl.q));
                 object.geometry = sgeometry;
-                object.material.color = new THREE.Color(0xFFFFFF*Math.random())
+                // object.material.map = new THREE.TextureLoader().load("assets/textures/white-fur-texture.jpg");
+                // object.material.color = new THREE.Color(0xFFFFFF*Math.random());
+                object.material.opacity = guiControl.opacity
+
             }
             function setup() {
                 var cubeMap = getCubeMap(3)
@@ -114,18 +125,54 @@
                     map: texture,
                     shading: THREE.FlatShading,
                     side: THREE.DoubleSide,
+                    // wireframe: true, 
+                    // wireframeLinewidth: 1, 
+                    transparent: true 
+                    
                 });
                 // central object
-
 
                 sgeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, guiControl.p, guiControl.q);
                 originalgGeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, guiControl.p, guiControl.q);
                 object = new THREE.Mesh(sgeometry, smaterial);
                 scene.add(object);
 
+                particle = new THREE.Object3D();
+                scene.add(particle);
+
+              var partGeo = new THREE.TetrahedronGeometry(2, 0);
+              var partMat = new THREE.MeshPhongMaterial({
+                color: 0xffffff,
+                shading: THREE.FlatShading
+              });
+              for (var i = 0; i < 1000; i++) {
+                var mesh = new THREE.Mesh(partGeo, partMat);
+                mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+                mesh.position.multiplyScalar(90 + (Math.random() * 700));
+                mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+                particle.add(mesh);
+              }
+
+                // Helpers
+                var axis = new THREE.AxisHelper(10);
+                scene.add(axis);
+
                 // light
-                var light = new THREE.AmbientLight(0xFFFFFF);
-                scene.add(light);
+                var ambientLight = new THREE.AmbientLight(0x999999 );
+                scene.add(ambientLight);
+              
+                var lights = [];
+                lights[0] = new THREE.DirectionalLight( 0xffffff, 1 );
+                lights[0].position.set( 1, 0, 0 );
+                lights[1] = new THREE.DirectionalLight( 0x11E8BB, 1 );
+                lights[1].position.set( 0.75, 1, 0.5 );
+                lights[2] = new THREE.DirectionalLight( 0x8a00C9, 0.5 );
+                lights[2].position.set( -2.75, -2, 0.5 );
+                scene.add( lights[0] );
+                scene.add( lights[1] );
+                scene.add( lights[2] );
+                var helper = new THREE.DirectionalLightHelper( lights[2] );
+                scene.add(helper);
             }
             function remove(object) {
                 scene.remove(object)
@@ -134,6 +181,31 @@
             var time = 0;
             function render() {
                 requestAnimationFrame(render);
+
+                particle.rotation.x += 0.0000;
+                particle.rotation.y -= 0.0040;
+
+                // if (guiControl.wfSolid > 0.5) {
+                //    object.material.wireframe = false;
+                //    object.material.shading = THREE.FlatShading;
+                //    object.material.side = THREE.FrontSide;
+                //  } else{
+                //    object.material.wireframe = true;
+                //    object.material.shading = THREE.SmoothShading;
+                //    object.material.side = THREE.DoubleSide;
+                //  };
+
+                if (guiControl.wfSolid > 0.5) {
+                    object.material.wireframe = false;
+                    object.material.shading = THREE.FlatShading;
+                    // object.material.side = THREE.DoubleSide;
+                 } else{
+                    object.material.wireframe = true;
+                    object.material.side = THREE.DoubleSide;
+                    // object.material.shading = THREE.SmoothShading;
+                 };
+
+
 
                 time += 1
                 texture.offset.y = time / 10000;
