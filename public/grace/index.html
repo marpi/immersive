@@ -146,30 +146,31 @@
                 object = new THREE.Mesh(sgeometry, objectMaterial1);
                 scene.add(object);
 
-    particles = new THREE.Object3D();
+                //particles
+                particles = new THREE.Object3D();
 
-    var partGeo = new THREE.TetrahedronGeometry(2, 0);
-    var partMat = new THREE.MeshPhongMaterial({
-      color: 0xffffff,
-      shading: THREE.FlatShading
-    });
-    for (var i = 0; i < 1000; i++) {
-      var mesh = new THREE.Mesh(partGeo, partMat);
-      mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-      mesh.position.multiplyScalar(90 + (Math.random() * 700));
-      mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-      particles.add(mesh);
-    }
+                var partGeo = new THREE.TetrahedronGeometry(2, 0);
+                var partMat = new THREE.MeshPhongMaterial({
+                  color: 0xffffff,
+                  shading: THREE.FlatShading
+                });
+                for (var i = 0; i < 1000; i++) {
+                  var mesh = new THREE.Mesh(partGeo, partMat);
+                  mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+                  mesh.position.multiplyScalar(90 + (Math.random() * 700));
+                  mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+                  particles.add(mesh);
+                }
 
-    var geom = new THREE.Geometry()
-    for (var j = 0; j < particles.children.length; j++) {
-        particles.children[j].updateMatrix();
-        geom.merge(particles.children[j].geometry, particles.children[j].matrix);
-    }
-    particles = new THREE.Mesh(geom, material);
-    scene.add(particles)    
+                var geom = new THREE.Geometry()
+                for (var j = 0; j < particles.children.length; j++) {
+                    particles.children[j].updateMatrix();
+                    geom.merge(particles.children[j].geometry, particles.children[j].matrix);
+                }
+                particles = new THREE.Mesh(geom, material);
+                scene.add(particles)    
 
-    TweenMax.to(particles.scale,10,{x:0.1,y:0.1,z:0.1});
+                TweenMax.to(particles.scale,10,{x:0.1,y:0.1,z:0.1});
 
                 // Helpers
                 var axis = new THREE.AxisHelper(10);
@@ -217,10 +218,17 @@
                     if (object.material != objectMaterial1){
                         object.material = objectMaterial1
                     }
+<<<<<<< HEAD
                  } else {
                     if (object.material != objectMaterial2)
                         object.material = objectMaterial2
                  };
+=======
+                 } else {
+                    if (object.material != objectMaterial2)
+                        object.material = objectMaterial2
+                 };
+>>>>>>> c39f736cace03f84208e342cd60718ac96a488ee
 
 
 
