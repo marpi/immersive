@@ -41,6 +41,7 @@
             var gui, guiControl, object
             var mobile = false;
             var texture
+            var objectMaterial1, objectMaterial2
             init();
             setup();
             render();
@@ -120,58 +121,75 @@
                 texture.wrapS = THREE.RepeatWrapping;
                 texture.wrapT = THREE.RepeatWrapping;
                 texture.repeat.set(2, 2);
-                var smaterial = new THREE.MeshStandardMaterial({
+
+                objectMaterial1 = new THREE.MeshStandardMaterial({
                     envMap: cubeMap,
                     map: texture,
                     shading: THREE.FlatShading,
                     side: THREE.DoubleSide,
-                    // wireframe: true, 
-                    // wireframeLinewidth: 1, 
-                    transparent: true 
-                    
+                    transparent: true
                 });
+
+                objectMaterial2 = new THREE.MeshStandardMaterial({
+                    envMap: cubeMap,
+                    map: texture,
+                    shading: THREE.SmoothShading,
+                    side: THREE.DoubleSide,
+                    wireframe: true,
+                    transparent: true
+                });
+
                 // central object
 
                 sgeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, guiControl.p, guiControl.q);
                 originalgGeometry = new THREE.TorusKnotGeometry(1.4, 0.55, 100, 16, guiControl.p, guiControl.q);
-                object = new THREE.Mesh(sgeometry, smaterial);
+                object = new THREE.Mesh(sgeometry, objectMaterial1);
                 scene.add(object);
 
-                particle = new THREE.Object3D();
-                scene.add(particle);
+    particles = new THREE.Object3D();
 
-              var partGeo = new THREE.TetrahedronGeometry(2, 0);
-              var partMat = new THREE.MeshPhongMaterial({
-                color: 0xffffff,
-                shading: THREE.FlatShading
-              });
-              for (var i = 0; i < 1000; i++) {
-                var mesh = new THREE.Mesh(partGeo, partMat);
-                mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-                mesh.position.multiplyScalar(90 + (Math.random() * 700));
-                mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-                particle.add(mesh);
-              }
+    var partGeo = new THREE.TetrahedronGeometry(2, 0);
+    var partMat = new THREE.MeshPhongMaterial({
+      color: 0xffffff,
+      shading: THREE.FlatShading
+    });
+    for (var i = 0; i < 1000; i++) {
+      var mesh = new THREE.Mesh(partGeo, partMat);
+      mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+      mesh.position.multiplyScalar(90 + (Math.random() * 700));
+      mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+      particles.add(mesh);
+    }
+
+    var geom = new THREE.Geometry()
+    for (var j = 0; j < particles.children.length; j++) {
+        particles.children[j].updateMatrix();
+        geom.merge(particles.children[j].geometry, particles.children[j].matrix);
+    }
+    particles = new THREE.Mesh(geom, material);
+    scene.add(particles)    
+
+    TweenMax.to(particles.scale,10,{x:0.1,y:0.1,z:0.1});
 
                 // Helpers
                 var axis = new THREE.AxisHelper(10);
                 scene.add(axis);
 
                 // light
-                var ambientLight = new THREE.AmbientLight(0x999999 );
+                var ambientLight = new THREE.AmbientLight(0x999999);
                 scene.add(ambientLight);
-              
+
                 var lights = [];
-                lights[0] = new THREE.DirectionalLight( 0xffffff, 1 );
-                lights[0].position.set( 1, 0, 0 );
-                lights[1] = new THREE.DirectionalLight( 0x11E8BB, 1 );
-                lights[1].position.set( 0.75, 1, 0.5 );
-                lights[2] = new THREE.DirectionalLight( 0x8a00C9, 0.5 );
-                lights[2].position.set( -2.75, -2, 0.5 );
-                scene.add( lights[0] );
-                scene.add( lights[1] );
-                scene.add( lights[2] );
-                var helper = new THREE.DirectionalLightHelper( lights[2] );
+                lights[0] = new THREE.DirectionalLight(0xffffff, 1);
+                lights[0].position.set(1, 0, 0);
+                lights[1] = new THREE.DirectionalLight(0x11E8BB, 1);
+                lights[1].position.set(0.75, 1, 0.5);
+                lights[2] = new THREE.DirectionalLight(0x8a00C9, 0.5);
+                lights[2].position.set(-2.75, -2, 0.5);
+                scene.add(lights[0]);
+                scene.add(lights[1]);
+                scene.add(lights[2]);
+                var helper = new THREE.DirectionalLightHelper(lights[2]);
                 scene.add(helper);
             }
             function remove(object) {
@@ -182,28 +200,27 @@
             function render() {
                 requestAnimationFrame(render);
 
-                particle.rotation.x += 0.0000;
-                particle.rotation.y -= 0.0040;
+                particles.rotation.x += 0.0000;
+                particles.rotation.y -= 0.0040;
 
                 // if (guiControl.wfSolid > 0.5) {
-                //    object.material.wireframe = false;
-                //    object.material.shading = THREE.FlatShading;
-                //    object.material.side = THREE.FrontSide;
-                //  } else{
-                //    object.material.wireframe = true;
-                //    object.material.shading = THREE.SmoothShading;
-                //    object.material.side = THREE.DoubleSide;
-                //  };
+                //    object.material.wireframe = false;
+                //    object.material.shading = THREE.FlatShading;
+                //    object.material.side = THREE.FrontSide;
+                //  } else{
+                //    object.material.wireframe = true;
+                //    object.material.shading = THREE.SmoothShading;
+                //    object.material.side = THREE.DoubleSide;
+                //  };
 
                 if (guiControl.wfSolid > 0.5) {
-                    object.material.wireframe = false;
-                    object.material.shading = THREE.FlatShading;
-                    // object.material.side = THREE.DoubleSide;
-                 } else{
-                    object.material.wireframe = true;
-                    object.material.side = THREE.DoubleSide;
-                    // object.material.shading = THREE.SmoothShading;
-                 };
+                    if (object.material != objectMaterial1){
+                        object.material = objectMaterial1
+                    }
+                 } else {
+                    if (object.material != objectMaterial2)
+                        object.material = objectMaterial2
+                 };
 
 
 
