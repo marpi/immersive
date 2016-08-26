@@ -51,7 +51,7 @@
 
             var container, stats;
             var texture, allGroups = [];
-            var camera, scene, renderer, particles, geometry, materials = [], parameters, i, h, color, sprite, size;
+            var camera, scene, renderer, particles, particles2, geometry, materials = [], parameters, i, h, color, sprite, size;
 
             init();
             setup();
@@ -65,12 +65,12 @@
                 // scene
 
                 scene = new THREE.Scene();
-                // scene.fog = new THREE.FogExp2( 0x000000, 0.0000 ); // not using but save for later
+                // scene.fog = new THREE.FogExp2( 0x000000, 0.0007 ); // not using but save for later
 
                 // camera
 
-                camera = new THREE.PerspectiveCamera(1015, window.innerWidth / window.innerHeight, 1, 2000);
-                camera.position.x = 10;
+                camera = new THREE.PerspectiveCamera(1015, window.innerWidth / window.innerHeight, 1, 3000);
+                camera.position.x = -20, -5;
 
 
                 controls = new THREE.OrbitControls(camera); //Toggle on to control camera angle, but toggle off when final decisions are made
@@ -99,9 +99,9 @@
                 for (i = 0; i < 10000; i++) {
 
                     var vertex = new THREE.Triangle();
-                    vertex.x = (Math.random() - .5) * 2000;
-                    vertex.y = (Math.random() - .5) * 2000;
-                    vertex.z = (Math.random() - .5) * 2000;
+                    vertex.x = (Math.random() - .5) * 2500;
+                    vertex.y = (Math.random() - .5) * 2500;
+                    vertex.z = (Math.random() - .5) * 2500;
 
                     geometry.vertices.push(vertex);
 
@@ -125,7 +125,7 @@
 
                     particles = new THREE.Points(geometry, materials[i]);
 
-                    // particles.rotation.y = i
+                    particles.rotation.y = i * 500 //important to keep the particles separate
                 
                     scene.add(particles);
                     allGroups.push(particles);
@@ -140,7 +140,6 @@
                 // stats = new Stats();
                 // container.appendChild( stats.dom );
 
-                //
                 window.addEventListener('resize', onWindowResize, false);
 
                 setInterval(updateSpriteSheets, 1000 / 5) //frames per second
@@ -150,20 +149,21 @@
             }
 
             function animateGroup() {
-                TweenMax.delayedCall(10, animateGroup)
+                TweenMax.delayedCall(.1, animateGroup)
                 var ease = Back.easeInOut;
                 for (var i = 0; i < allGroups.length; i++) {
-                    TweenMax.to(allGroups[i].position, 3, {
+                    TweenMax.to(allGroups[i].position, 1, {
+
                         delay:i/5,
-                        x: (Math.random() - .5) * 1000,
-                        y: (Math.random() - .5) * 1000,
-                        z: (Math.random() - .5) * 1000,
+                        x: (Math.random() - .1) * 25,
+                        y: (Math.random() - .1) * 15,
+                        z: (Math.random() - .1) * 20,
                         ease: ease
                     });
                 }
             }
 
-
+         
 
             function updateSpriteSheets() {
                 texture.offset.x += 1 / 11 //move right one eleventh of the texture
@@ -226,6 +226,7 @@
                 camera.lookAt(scene.position);
 
                 renderer.render(scene, camera);
+
 
 
 

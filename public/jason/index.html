@@ -127,8 +127,8 @@
 
                 // light
 
-                var light = new THREE.DirectionalLight(0xffffff);
-                light.position.set(0, 100, 350);
+                var light = new THREE.AmbientLight(0xffffff);
+                // light.position.set(0, 100, 350);
                 camera.add(light);
 
                 light.target = camera;
