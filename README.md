@@ -2,17 +2,17 @@
 
 [http://grayarea.org/education/immersive/](http://grayarea.org/education/immersive/)
 
-[![alt text](/assets/image1.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
+[![alt text](/assets/image1.jpg "Immersive Three.js Workshop")](http://classes.marpi.pl/immersive/)
 
-[![alt text](/assets/image2.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/donut)
+[![alt text](/assets/image2.jpg "Immersive Three.js Workshop")](http://classes.marpi.pl/immersive/public/donut)
 
-[![alt text](/assets/image3.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/cube_wall)
+[![alt text](/assets/image3.jpg "Immersive Three.js Workshop")](http://classes.marpi.pl/immersive/public/cube_wall)
 
-[![alt text](/assets/image4.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/everyone)
+[![alt text](/assets/image4.jpg "Immersive Three.js Workshop")](http://classes.marpi.pl/immersive/public/everyone)
 
-[![alt text](/assets/image5.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/lights)
+[![alt text](/assets/image5.jpg "Immersive Three.js Workshop")](http://classes.marpi.pl/immersive/public/lights)
 
-full list: [http://classes.marpi.pl/immersive//public/](http://classes.marpi.pl/immersive//public/)
+full list: [http://classes.marpi.pl/immersive/public/](http://classes.marpi.pl/immersive/public/)
 
 ### How to run
 
