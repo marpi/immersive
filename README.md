@@ -2,7 +2,7 @@
 
 [http://grayarea.org/education/immersive/](http://grayarea.org/education/immersive/)
 
-[![alt text]/assets/image1.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
+[![alt text](/assets/image1.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
 
 [![alt text](/assets/image2.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/donut)
 
