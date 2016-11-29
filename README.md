@@ -2,17 +2,17 @@
 
 [http://grayarea.org/education/immersive/](http://grayarea.org/education/immersive/)
 
-[![alt text](http://immersive.marpi.pl/assets/image1.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
+[![alt text]/assets/image1.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/)
 
-[![alt text](http://immersive.marpi.pl/assets/image2.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/donut)
+[![alt text](/assets/image2.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/donut)
 
-[![alt text](http://immersive.marpi.pl/assets/image3.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/cube_wall)
+[![alt text](/assets/image3.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/cube_wall)
 
-[![alt text](http://immersive.marpi.pl/assets/image4.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/everyone)
+[![alt text](/assets/image4.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/everyone)
 
-[![alt text](http://immersive.marpi.pl/assets/image5.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/lights)
+[![alt text](/assets/image5.jpg "Immersive Three.js Workshop")](https://immersive.marpi.pl/public/lights)
 
-full list: [http://immersive.marpi.pl/public/](http://immersive.marpi.pl/public/)
+full list: [http://classes.marpi.pl/immersive//public/](http://classes.marpi.pl/immersive//public/)
 
 ### How to run
 
@@ -42,6 +42,6 @@ python -m http.server
 
 And once you commit your changes, and want to see them in Google Cardboard:
 
-[https://immersive.marpi.pl/](https://immersive.marpi.pl/)
+[http://classes.marpi.pl/immersive/](http://classes.marpi.pl/immersive/)
 
 
