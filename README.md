@@ -14,31 +14,15 @@
 
 full list: [http://classes.marpi.pl/immersive/public/](http://classes.marpi.pl/immersive/public/)
 
-### How to run
+How to run
+-------
 
-In order to run the project you need a local server. You can use Browsersync:
+In order to see your [Three.js](http://threejs.org) project on your own computer you have to run "localhost":
 
-[https://www.browsersync.io/](https://www.browsersync.io/)
-
-```sh
-# Install Browsersync
-npm i -g browser-sync
-# Run Browsersync from the folder you want to serve
-browser-sync start --directory -s -f .
-```
-
-Or run Python's built-in http server.
-In terminal, browse to the repo and run:
-
-```sh
-# Python 2.x
-python -m SimpleHTTPServer
-```
-
-```sh
-# Python 3.x
-python -m http.server
-```
+- Windows: You can use [WAMP](http://www.wampserver.com/en/), or any simple local server
+- OSX: In terminal, go to your public/name/ folder and type: php -S 0.0.0.0:8000
+- Linux: In terminal, go to your public/name/ folder and type: python -m SimpleHTTPServer
+- Otherwise, you can try running Chrome with the flags --disable-web-security
 
 And once you commit your changes, and want to see them in Google Cardboard:
 
