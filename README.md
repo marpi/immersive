@@ -28,4 +28,10 @@ And once you commit your changes, and want to see them in Google Cardboard:
 
 [http://classes.marpi.pl/immersive/](http://classes.marpi.pl/immersive/)
 
+Libraries
+-------
+
+[three.js](https://github.com/mrdoob/three.js/), [TweenMax.js](https://greensock.com/tweenmax), [isMobile](https://github.com/kaimallea/isMobile)
+
+
 
